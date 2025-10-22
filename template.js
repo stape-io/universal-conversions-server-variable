@@ -5,11 +5,9 @@ const getType = require('getType');
 const Math = require('Math');
 const makeTableMap = require('makeTableMap');
 
-
-
-//let inputArray = data.inputArray;
 const platform = data.platform;
 const keyId = data.keyId;
+const keyBrand = data.keyBrand;
 const keyPrice = data.keyPrice;
 const keyQuantity = data.keyQuantity;
 const keyCategory = data.keyCategory;
@@ -31,9 +29,8 @@ utils.criteo =
 utils.reddit =
 utils.rakuten = {};
 let formattedArray;
-
-let inputArray = data.inputArray;
     
+let inputArray = data.inputArray; 
 
 /* Helper Functions */
 
@@ -47,15 +44,13 @@ utils.getIdsArray = (inputArray) => {
   return inputArray.map(item => item[keyId]);
 };
 
-utils.getNameArray = (inputArray) => {
-  return inputArray.map(item => item[keyName]);
-};
+utils.getName = (inputArray) => inputArray[0][keyName];
 
 utils.getNumberOfItems = (inputArray) => {
   return inputArray.reduce((acc,curr) => acc + curr[keyQuantity],0);
 };
 
-utils.getContents = (inputArray) => {
+utils.meta.getContents = (inputArray) => {
   var contents = inputArray.map(item => {
     return {
       'id': item[keyId],
@@ -99,17 +94,32 @@ utils.ga4.getItems = (inputArray) => {
  return formattedArray;
 };
 
+utils.tiktok.getContents = (inputArray) => {
+return inputArray.map((item) => {
+  return {
+    'content_id': item[keyId],
+    'price': item[keyPrice],
+    'content_name': item[keyName],
+    'brand': item[keyBrand],      
+    'content_category': item[keyCategory.reverse()[0]]
+  };
+});
+
+};
 
 
 utils.meta.content_ids = utils.getIdsArray;
 utils.meta.value = utils.getTotalValue;
-utils.meta.content_name = utils.getNameArray;
 utils.meta.num_items = utils.getNumberOfItems;
-utils.meta.contents = utils.getContents;
+utils.meta.contents = utils.meta.getContents;
 
 utils.ga4.value = utils.getTotalValue;
 utils.ga4.items = utils.ga4.getItems;
 
+utils.tiktok.contents = utils.tiktok.getContents;
+utils.tiktok.value = utils.getTotalValue;
+utils.tiktok.content_ids = utils.getIdsArray;
+utils.tiktok.num_items = utils.getNumberOfItems;
 
 /* Main Logic */
 if(getType(inputArray) != 'array' || inputArray.length == 0) return;

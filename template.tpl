@@ -27,13 +27,13 @@ ___TEMPLATE_PARAMETERS___
   {
     "type": "GROUP",
     "name": "input_array_group",
-    "displayName": "Input Array",
-    "groupStyle": "ZIPPY_OPEN",
+    "displayName": "Input Array of Objects",
+    "groupStyle": "NO_ZIPPY",
     "subParams": [
       {
         "type": "TEXT",
         "name": "inputArray",
-        "displayName": "Help",
+        "displayName": "Input Array",
         "simpleValueType": true,
         "valueValidators": [
           {
@@ -49,7 +49,7 @@ ___TEMPLATE_PARAMETERS___
     "type": "GROUP",
     "name": "platform_group",
     "displayName": "Choose the Platform",
-    "groupStyle": "ZIPPY_OPEN",
+    "groupStyle": "NO_ZIPPY",
     "subParams": [
       {
         "type": "SELECT",
@@ -102,7 +102,8 @@ ___TEMPLATE_PARAMETERS___
           }
         ],
         "simpleValueType": true,
-        "subParams": []
+        "subParams": [],
+        "alwaysInSummary": false
       }
     ]
   },
@@ -178,6 +179,42 @@ ___TEMPLATE_PARAMETERS___
             "type": "EQUALS"
           }
         ]
+      },
+      {
+        "type": "RADIO",
+        "name": "tiktokReturnParameter",
+        "displayName": "",
+        "radioItems": [
+          {
+            "value": "contents",
+            "displayValue": "contents",
+            "help": "Returns the required parameter \u003cstrong\u003e contents \u003c/strong\u003e. Take a look at \u003ca href\u003d\"https://business-api.tiktok.com/portal/docs?rid\u003doyn7lhbo6ar\u0026id\u003d1771100799076354\"\u003e official documentation\u003c/a\u003e for more information.",
+            "subParams": []
+          },
+          {
+            "value": "value",
+            "displayValue": "value",
+            "help": "Returns the \u003cstrong\u003e total value \u003c/strong\u003e of the products in the Input Array, disregarding any discounts. \u003cbr\u003e  Take a look at \u003ca href\u003d\"https://business-api.tiktok.com/portal/docs?rid\u003doyn7lhbo6ar\u0026id\u003d1771100799076354\"\u003e official documentation\u003c/a\u003e for more information."
+          },
+          {
+            "value": "num_items",
+            "displayValue": "num_items",
+            "help": "Returns the \u003cstrong\u003e quantity of items \u003c/strong\u003e in the array. \u003cbr\u003e Take a look at \u003ca href\u003d\"https://business-api.tiktok.com/portal/docs?rid\u003doyn7lhbo6ar\u0026id\u003d1771100799076354\"\u003e official documentation\u003c/a\u003e for more information."
+          },
+          {
+            "value": "content_ids",
+            "displayValue": "content_ids",
+            "help": "Returns an array of \u003cstrong\u003e ID strings \u003c/strong\u003e. \u003cbr\u003e Take a look at \u003ca href\u003d\"https://business-api.tiktok.com/portal/docs?rid\u003doyn7lhbo6ar\u0026id\u003d1771100799076354\"\u003e official documentation\u003c/a\u003e for more information."
+          }
+        ],
+        "simpleValueType": true,
+        "enablingConditions": [
+          {
+            "paramName": "platform",
+            "paramValue": "tiktok",
+            "type": "EQUALS"
+          }
+        ]
       }
     ]
   },
@@ -207,6 +244,16 @@ ___TEMPLATE_PARAMETERS___
             "paramName": "ga4ReturnParameter",
             "paramValue": "items",
             "type": "EQUALS"
+          },
+          {
+            "paramName": "tiktokReturnParameter",
+            "paramValue": "contents",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "tiktokReturnParameter",
+            "paramValue": "content_ids",
+            "type": "EQUALS"
           }
         ],
         "help": "Input Array key for item \u003cstrong\u003eunique identifier\u003c/strong\u003e",
@@ -215,6 +262,21 @@ ___TEMPLATE_PARAMETERS___
             "type": "NON_EMPTY"
           }
         ]
+      },
+      {
+        "type": "TEXT",
+        "name": "keyBrand",
+        "displayName": "Product Brand",
+        "simpleValueType": true,
+        "enablingConditions": [
+          {
+            "paramName": "tiktokReturnParameter",
+            "paramValue": "contents",
+            "type": "EQUALS"
+          }
+        ],
+        "help": "Input Array key for item \u003cstrong\u003ebrand\u003c/strong\u003e",
+        "valueValidators": []
       },
       {
         "type": "TEXT",
@@ -240,6 +302,16 @@ ___TEMPLATE_PARAMETERS___
           },
           {
             "paramName": "ga4ReturnParameter",
+            "paramValue": "value",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "tiktokReturnParameter",
+            "paramValue": "contents",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "tiktokReturnParameter",
             "paramValue": "value",
             "type": "EQUALS"
           }
@@ -281,6 +353,16 @@ ___TEMPLATE_PARAMETERS___
             "paramName": "ga4ReturnParameterm",
             "paramValue": "items",
             "type": "EQUALS"
+          },
+          {
+            "paramName": "tiktokReturnParameter",
+            "paramValue": "value",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "tiktokReturnParameter",
+            "paramValue": "num_items",
+            "type": "EQUALS"
           }
         ],
         "valueValidators": [
@@ -297,13 +379,23 @@ ___TEMPLATE_PARAMETERS___
         "help": "Input Array key for item \u003cstrong\u003ename\u003c/strong\u003e",
         "enablingConditions": [
           {
+            "paramName": "ga4ReturnParameter",
+            "paramValue": "items",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "tiktokReturnParameter",
+            "paramValue": "contents",
+            "type": "EQUALS"
+          },
+          {
             "paramName": "metaReturnParameter",
             "paramValue": "content_name",
             "type": "EQUALS"
           },
           {
-            "paramName": "ga4ReturnParameter",
-            "paramValue": "items",
+            "paramName": "tiktokReturnParameter",
+            "paramValue": "content_name",
             "type": "EQUALS"
           }
         ],
@@ -323,6 +415,11 @@ ___TEMPLATE_PARAMETERS___
           {
             "paramName": "ga4ReturnParameter",
             "paramValue": "items",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "tiktokReturnParameter",
+            "paramValue": "contents",
             "type": "EQUALS"
           }
         ],
@@ -386,6 +483,11 @@ ___TEMPLATE_PARAMETERS___
         "paramName": "platform",
         "paramValue": "klaviyo",
         "type": "EQUALS"
+      },
+      {
+        "paramName": "platform",
+        "paramValue": "tiktok",
+        "type": "EQUALS"
       }
     ]
   },
@@ -428,6 +530,7 @@ const makeTableMap = require('makeTableMap');
 //let inputArray = data.inputArray;
 const platform = data.platform;
 const keyId = data.keyId;
+const keyBrand = data.keyBrand;
 const keyPrice = data.keyPrice;
 const keyQuantity = data.keyQuantity;
 const keyCategory = data.keyCategory;
@@ -450,8 +553,9 @@ utils.reddit =
 utils.rakuten = {};
 let formattedArray;
 
-let inputArray = data.inputArray;
+//let inputArray = data.inputArray;
     
+let inputArray = data.inputArray; 
 
 /* Helper Functions */
 
@@ -465,15 +569,13 @@ utils.getIdsArray = (inputArray) => {
   return inputArray.map(item => item[keyId]);
 };
 
-utils.getNameArray = (inputArray) => {
-  return inputArray.map(item => item[keyName]);
-};
+utils.getName = (inputArray) => inputArray[0][keyName];
 
 utils.getNumberOfItems = (inputArray) => {
   return inputArray.reduce((acc,curr) => acc + curr[keyQuantity],0);
 };
 
-utils.getContents = (inputArray) => {
+utils.meta.getContents = (inputArray) => {
   var contents = inputArray.map(item => {
     return {
       'id': item[keyId],
@@ -517,17 +619,32 @@ utils.ga4.getItems = (inputArray) => {
  return formattedArray;
 };
 
+utils.tiktok.getContents = (inputArray) => {
+return inputArray.map((item) => {
+  return {
+    'content_id': item[keyId],
+    'price': item[keyPrice],
+    'content_name': item[keyName],
+    'brand': item[keyBrand],      
+    'content_category': item[keyCategory.reverse()[0]]
+  };
+});
+
+};
 
 
 utils.meta.content_ids = utils.getIdsArray;
 utils.meta.value = utils.getTotalValue;
-utils.meta.content_name = utils.getNameArray;
 utils.meta.num_items = utils.getNumberOfItems;
-utils.meta.contents = utils.getContents;
+utils.meta.contents = utils.meta.getContents;
 
 utils.ga4.value = utils.getTotalValue;
 utils.ga4.items = utils.ga4.getItems;
 
+utils.tiktok.contents = utils.tiktok.getContents;
+utils.tiktok.value = utils.getTotalValue;
+utils.tiktok.content_ids = utils.getIdsArray;
+utils.tiktok.num_items = utils.getNumberOfItems;
 
 /* Main Logic */
 if(getType(inputArray) != 'array' || inputArray.length == 0) return;
@@ -840,6 +957,6 @@ setup: |-
 
 ___NOTES___
 
-Created on 22/10/2025, 14:47:46
+Created on 22/10/2025, 16:42:40
 
 
