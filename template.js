@@ -5,10 +5,9 @@ const getType = require('getType');
 const Math = require('Math');
 const makeTableMap = require('makeTableMap');
 const Object = require('Object');
+const getEventData = require('getEventData');
 
 
-
-//let inputArray = data.inputArray;
 const platform = data.platform;
 const keyId = data.keyId;
 const keyBrand = data.keyBrand;
@@ -22,8 +21,9 @@ const round = Math.round;
 const optionalData = data.optionalData? makeTableMap(data.optionalData,'optionalParamInputKey','optionalParamOutputKey') : {};
 const task = {};
 let formattedArray;
-const inputArray = data.inputArray;
-    
+const inputArray = data.getGa4Items? getEventData('items') : data.inputArray;
+
+
 
 task.meta = {
   content_ids : getIdsArray,
@@ -63,6 +63,15 @@ task.pinterest = {
   value: getTotalValue,
   num_items: getNumberOfItems,
   content_ids: getIdsArray
+};
+
+
+task.snapchat = {
+  contents: getMetaContents,
+  value: getTotalValue,
+  content_ids: getIdsArray,
+  num_items: getNumberOfItems,
+  content_name: getName
 };
 
 

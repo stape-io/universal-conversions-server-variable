@@ -41,7 +41,20 @@ ___TEMPLATE_PARAMETERS___
           }
         ],
         "help": "Expected an array of product objects [{}].",
-        "alwaysInSummary": true
+        "alwaysInSummary": true,
+        "enablingConditions": [
+          {
+            "paramName": "getGa4Items",
+            "paramValue": true,
+            "type": "NOT_EQUALS"
+          }
+        ]
+      },
+      {
+        "type": "CHECKBOX",
+        "name": "getGa4Items",
+        "checkboxText": "Use GA4 items from Event Data?",
+        "simpleValueType": true
       }
     ]
   },
@@ -313,6 +326,47 @@ ___TEMPLATE_PARAMETERS___
             "type": "EQUALS"
           }
         ]
+      },
+      {
+        "type": "RADIO",
+        "name": "snapchatReturnParameter",
+        "displayName": "",
+        "radioItems": [
+          {
+            "value": "content_ids",
+            "displayValue": "content_ids",
+            "help": "Returns an array of item ids. Be careful to use the correct \"content_type\" to match the input IDs this variable will return. Take a look at \u003ca href\u003d\"https://developers.facebook.com/docs/marketing-api/conversions-api/parameters/custom-data\"\u003e official documentation\u003c/a\u003e for more information.",
+            "subParams": []
+          },
+          {
+            "value": "contents",
+            "displayValue": "contents",
+            "help": "Returns a list of product objects as described in \u003ca href\u003d\"https://developers.facebook.com/docs/marketing-api/conversions-api/parameters/custom-data\"\u003e official documentation\u003c/a\u003e as of October 2025."
+          },
+          {
+            "value": "value",
+            "displayValue": "value",
+            "help": "Returns the Input Array total value, as described in \u003ca href\u003d\"https://developers.facebook.com/docs/marketing-api/conversions-api/parameters/custom-data\"\u003e official documentation\u003c/a\u003e as of October 2025."
+          },
+          {
+            "value": "content_name",
+            "displayValue": "content_name",
+            "help": "Returns a string for the name of the product. This will only return a value if your Input Array has only one object. For more information see description in \u003ca href\u003d\"https://developers.facebook.com/docs/marketing-api/conversions-api/parameters/custom-data\"\u003e official documentation\u003c/a\u003e as of October 2025."
+          },
+          {
+            "value": "num_items",
+            "displayValue": "num_items",
+            "help": "Returns the number of items in your input array. For more information see description in \u003ca href\u003d\"https://developers.facebook.com/docs/marketing-api/conversions-api/parameters/custom-data\"\u003e official documentation\u003c/a\u003e as of October 2025."
+          }
+        ],
+        "simpleValueType": true,
+        "enablingConditions": [
+          {
+            "paramName": "platform",
+            "paramValue": "snapchat",
+            "type": "EQUALS"
+          }
+        ]
       }
     ]
   },
@@ -375,6 +429,16 @@ ___TEMPLATE_PARAMETERS___
           },
           {
             "paramName": "pinterestReturnParameter",
+            "paramValue": "content_ids",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "snapchatReturnParameter",
+            "paramValue": "contents",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "snapchatReturnParameter",
             "paramValue": "content_ids",
             "type": "EQUALS"
           }
@@ -472,6 +536,16 @@ ___TEMPLATE_PARAMETERS___
             "paramName": "pinterestReturnParameter",
             "paramValue": "value",
             "type": "EQUALS"
+          },
+          {
+            "paramName": "snapchatReturnParameter",
+            "paramValue": "contents",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "snapchatReturnParameter",
+            "paramValue": "value",
+            "type": "EQUALS"
           }
         ],
         "valueValidators": [
@@ -561,6 +635,21 @@ ___TEMPLATE_PARAMETERS___
             "paramName": "pinterestReturnParameter",
             "paramValue": "value",
             "type": "EQUALS"
+          },
+          {
+            "paramName": "snapchatReturnParameter",
+            "paramValue": "contents",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "snapchatReturnParameter",
+            "paramValue": "value",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "snapchatReturnParameter",
+            "paramValue": "num_items",
+            "type": "EQUALS"
           }
         ],
         "valueValidators": [
@@ -609,6 +698,11 @@ ___TEMPLATE_PARAMETERS___
           {
             "paramName": "pinterestReturnParameter",
             "paramValue": "contents",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "snapchatReturnParameter",
+            "paramValue": "content_name",
             "type": "EQUALS"
           }
         ],
@@ -747,10 +841,9 @@ const getType = require('getType');
 const Math = require('Math');
 const makeTableMap = require('makeTableMap');
 const Object = require('Object');
+const getEventData = require('getEventData');
 
 
-
-//let inputArray = data.inputArray;
 const platform = data.platform;
 const keyId = data.keyId;
 const keyBrand = data.keyBrand;
@@ -764,8 +857,9 @@ const round = Math.round;
 const optionalData = data.optionalData? makeTableMap(data.optionalData,'optionalParamInputKey','optionalParamOutputKey') : {};
 const task = {};
 let formattedArray;
-const inputArray = data.inputArray;
-    
+const inputArray = data.getGa4Items? getEventData('items') : data.inputArray;
+
+
 
 task.meta = {
   content_ids : getIdsArray,
@@ -805,6 +899,15 @@ task.pinterest = {
   value: getTotalValue,
   num_items: getNumberOfItems,
   content_ids: getIdsArray
+};
+
+
+task.snapchat = {
+  contents: getMetaContents,
+  value: getTotalValue,
+  content_ids: getIdsArray,
+  num_items: getNumberOfItems,
+  content_name: getName
 };
 
 
@@ -936,6 +1039,39 @@ ___SERVER_PERMISSIONS___
           "value": {
             "type": 1,
             "string": "debug"
+          }
+        }
+      ]
+    },
+    "clientAnnotations": {
+      "isEditedByUser": true
+    },
+    "isRequired": true
+  },
+  {
+    "instance": {
+      "key": {
+        "publicId": "read_event_data",
+        "versionId": "1"
+      },
+      "param": [
+        {
+          "key": "keyPatterns",
+          "value": {
+            "type": 2,
+            "listItem": [
+              {
+                "type": 1,
+                "string": "items"
+              }
+            ]
+          }
+        },
+        {
+          "key": "eventDataAccess",
+          "value": {
+            "type": 1,
+            "string": "specific"
           }
         }
       ]
@@ -1226,6 +1362,6 @@ setup: |-
 
 ___NOTES___
 
-Created on 23/10/2025, 10:24:49
+Created on 23/10/2025, 15:29:45
 
 
