@@ -75,6 +75,13 @@ task.snapchat = {
 };
 
 
+task.reddit = {
+  products: getRedditProducts,
+  value: getTotalValue,
+  item_count: getNumberOfItems,
+};
+
+
 /* Main Logic */
 if(getType(inputArray) != 'array' || inputArray.length == 0) return;
 formattedArray = task[platform][returnParameter](inputArray);
@@ -187,3 +194,13 @@ function getPinterestContents(){
  });
 }
 
+function getRedditProducts(){
+ return inputArray.map((item) => {  
+  return {
+    'id': item[keyId],
+    'price': item[keyPrice],
+    'name': item[keyName],
+    'category': item[lastCategory]
+  };
+ });
+}

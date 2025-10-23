@@ -112,6 +112,10 @@ ___TEMPLATE_PARAMETERS___
           {
             "value": "rakuten",
             "displayValue": "Rakuten"
+          },
+          {
+            "value": "reddit",
+            "displayValue": "Reddit"
           }
         ],
         "simpleValueType": true,
@@ -341,22 +345,22 @@ ___TEMPLATE_PARAMETERS___
           {
             "value": "contents",
             "displayValue": "contents",
-            "help": "Returns a list of product objects as described in \u003ca href\u003d\"https://developers.facebook.com/docs/marketing-api/conversions-api/parameters/custom-data\"\u003e official documentation\u003c/a\u003e as of October 2025."
+            "help": "Returns a list of product objects as described in \u003ca href\u003d\"https://developers.snap.com/api/marketing-api/Conversions-API/Parameters\"\u003e official documentation\u003c/a\u003e as of October 2025."
           },
           {
             "value": "value",
             "displayValue": "value",
-            "help": "Returns the Input Array total value, as described in \u003ca href\u003d\"https://developers.facebook.com/docs/marketing-api/conversions-api/parameters/custom-data\"\u003e official documentation\u003c/a\u003e as of October 2025."
+            "help": "Returns the Input Array total value, as described in \u003ca href\u003d\"https://developers.snap.com/api/marketing-api/Conversions-API/Parameters\"\u003e official documentation\u003c/a\u003e as of October 2025."
           },
           {
             "value": "content_name",
             "displayValue": "content_name",
-            "help": "Returns a string for the name of the product. This will only return a value if your Input Array has only one object. For more information see description in \u003ca href\u003d\"https://developers.facebook.com/docs/marketing-api/conversions-api/parameters/custom-data\"\u003e official documentation\u003c/a\u003e as of October 2025."
+            "help": "Returns a string for the name of the product. This will only return a value if your Input Array has only one object. For more information see description in \u003ca href\u003d\"https://developers.snap.com/api/marketing-api/Conversions-API/Parameters\"\u003e official documentation\u003c/a\u003e as of October 2025."
           },
           {
             "value": "num_items",
             "displayValue": "num_items",
-            "help": "Returns the number of items in your input array. For more information see description in \u003ca href\u003d\"https://developers.facebook.com/docs/marketing-api/conversions-api/parameters/custom-data\"\u003e official documentation\u003c/a\u003e as of October 2025."
+            "help": "Returns the number of items in your input array. For more information see description in \u003ca href\u003d\"https://developers.snap.com/api/marketing-api/Conversions-API/Parameters\"\u003e official documentation\u003c/a\u003e as of October 2025."
           }
         ],
         "simpleValueType": true,
@@ -364,6 +368,36 @@ ___TEMPLATE_PARAMETERS___
           {
             "paramName": "platform",
             "paramValue": "snapchat",
+            "type": "EQUALS"
+          }
+        ]
+      },
+      {
+        "type": "RADIO",
+        "name": "redditReturnParameter",
+        "displayName": "",
+        "radioItems": [
+          {
+            "value": "products",
+            "displayValue": "products",
+            "help": "Returns a list of product objects as described in \u003ca href\u003d\"https://ads-api.reddit.com/docs/v3/operations/Post%20Conversion%20Events\"\u003e official documentation\u003c/a\u003e as of October 2025."
+          },
+          {
+            "value": "value",
+            "displayValue": "value",
+            "help": "Returns the Input Array total value, as described in \u003ca href\u003d\"https://ads-api.reddit.com/docs/v3/operations/Post%20Conversion%20Events\"\u003e official documentation\u003c/a\u003e as of October 2025."
+          },
+          {
+            "value": "item_count",
+            "displayValue": "item_count",
+            "help": "Returns the number of items in your input array. For more information see description in \u003ca href\u003d\"https://ads-api.reddit.com/docs/v3/operations/Post%20Conversion%20Events\"\u003e official documentation\u003c/a\u003e as of October 2025."
+          }
+        ],
+        "simpleValueType": true,
+        "enablingConditions": [
+          {
+            "paramName": "platform",
+            "paramValue": "reddit",
             "type": "EQUALS"
           }
         ]
@@ -440,6 +474,11 @@ ___TEMPLATE_PARAMETERS___
           {
             "paramName": "snapchatReturnParameter",
             "paramValue": "content_ids",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "redditReturnParameter",
+            "paramValue": "products",
             "type": "EQUALS"
           }
         ],
@@ -546,6 +585,11 @@ ___TEMPLATE_PARAMETERS___
             "paramName": "snapchatReturnParameter",
             "paramValue": "value",
             "type": "EQUALS"
+          },
+          {
+            "paramName": "redditReturnParameter",
+            "paramValue": "value",
+            "type": "EQUALS"
           }
         ],
         "valueValidators": [
@@ -650,6 +694,16 @@ ___TEMPLATE_PARAMETERS___
             "paramName": "snapchatReturnParameter",
             "paramValue": "num_items",
             "type": "EQUALS"
+          },
+          {
+            "paramName": "redditReturnParameter",
+            "paramValue": "value",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "redditReturnParameter",
+            "paramValue": "item_count",
+            "type": "EQUALS"
           }
         ],
         "valueValidators": [
@@ -704,6 +758,11 @@ ___TEMPLATE_PARAMETERS___
             "paramName": "snapchatReturnParameter",
             "paramValue": "content_name",
             "type": "EQUALS"
+          },
+          {
+            "paramName": "redditReturnParameter",
+            "paramValue": "products",
+            "type": "EQUALS"
           }
         ],
         "valueValidators": [
@@ -737,6 +796,11 @@ ___TEMPLATE_PARAMETERS___
           {
             "paramName": "pinterestReturnParameter",
             "paramValue": "contents",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "redditReturnParameter",
+            "paramValue": "products",
             "type": "EQUALS"
           }
         ],
@@ -911,6 +975,13 @@ task.snapchat = {
 };
 
 
+task.reddit = {
+  products: getRedditProducts,
+  value: getTotalValue,
+  item_count: getNumberOfItems,
+};
+
+
 /* Main Logic */
 if(getType(inputArray) != 'array' || inputArray.length == 0) return;
 formattedArray = task[platform][returnParameter](inputArray);
@@ -1019,6 +1090,17 @@ function getPinterestContents(){
     'quantity': item[keyQuantity],
     'item_category': item[lastCategory],
     'item_brand': item[keyBrand]
+  };
+ });
+}
+
+function getRedditProducts(){
+ return inputArray.map((item) => {  
+  return {
+    'id': item[keyId],
+    'price': item[keyPrice],
+    'name': item[keyName],
+    'category': item[lastCategory]
   };
  });
 }
@@ -1362,6 +1444,6 @@ setup: |-
 
 ___NOTES___
 
-Created on 23/10/2025, 15:29:45
+Created on 23/10/2025, 15:46:46
 
 
