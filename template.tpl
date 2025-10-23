@@ -90,7 +90,7 @@ ___TEMPLATE_PARAMETERS___
           },
           {
             "value": "pinterest",
-            "displayValue": "Pinterest"
+            "displayValue": "Pinterest v5.21.0"
           },
           {
             "value": "criteo",
@@ -277,6 +277,42 @@ ___TEMPLATE_PARAMETERS___
             "type": "EQUALS"
           }
         ]
+      },
+      {
+        "type": "RADIO",
+        "name": "pinterestReturnParameter",
+        "displayName": "",
+        "radioItems": [
+          {
+            "value": "contents",
+            "displayValue": "contents",
+            "help": "Returns the required parameter \u003cstrong\u003e contents \u003c/strong\u003e. \u003cbr\u003e Take a look at the \u003ca href\u003d\"https://developers.pinterest.com/docs/api/v5/events-create/\"\u003e official documentation\u003c/a\u003e for more information.",
+            "subParams": []
+          },
+          {
+            "value": "value",
+            "displayValue": "value",
+            "help": "Returns the \u003cstrong\u003e total value \u003c/strong\u003e of the products in the Input Array, disregarding any discounts.  \u003cbr\u003e Take a look at the \u003ca href\u003d\"https://developers.pinterest.com/docs/api/v5/events-create/\"\u003e official documentation\u003c/a\u003e for more information."
+          },
+          {
+            "value": "num_items",
+            "displayValue": "num_items",
+            "help": "Returns the number of items in the input array.\n \u003cbr\u003e Take a look at the \u003ca href\u003d\"https://developers.pinterest.com/docs/api/v5/events-create/\"\u003e official documentation\u003c/a\u003e for more information."
+          },
+          {
+            "value": "content_ids",
+            "displayValue": "content_ids",
+            "help": "Returns a list of \u003cstrong\u003e IDs \u003c/strong\u003e. \u003cbr\u003eTake a look at the \u003ca href\u003d\"https://developers.pinterest.com/docs/api/v5/events-create/\"\u003e official documentation\u003c/a\u003e for more information."
+          }
+        ],
+        "simpleValueType": true,
+        "enablingConditions": [
+          {
+            "paramName": "platform",
+            "paramValue": "pinterest",
+            "type": "EQUALS"
+          }
+        ]
       }
     ]
   },
@@ -331,6 +367,16 @@ ___TEMPLATE_PARAMETERS___
             "paramName": "microsoftReturnParameter",
             "paramValue": "items",
             "type": "EQUALS"
+          },
+          {
+            "paramName": "pinterestReturnParameter",
+            "paramValue": "contents",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "pinterestReturnParameter",
+            "paramValue": "content_ids",
+            "type": "EQUALS"
           }
         ],
         "help": "Input Array key for item \u003cstrong\u003eunique identifier\u003c/strong\u003e",
@@ -348,6 +394,11 @@ ___TEMPLATE_PARAMETERS___
         "enablingConditions": [
           {
             "paramName": "tiktokReturnParameter",
+            "paramValue": "contents",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "pinterestReturnParameter",
             "paramValue": "contents",
             "type": "EQUALS"
           }
@@ -410,6 +461,16 @@ ___TEMPLATE_PARAMETERS___
           {
             "paramName": "microsoftReturnParameter",
             "paramValue": "items",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "pinterestReturnParameter",
+            "paramValue": "contents",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "pinterestReturnParameter",
+            "paramValue": "value",
             "type": "EQUALS"
           }
         ],
@@ -485,6 +546,21 @@ ___TEMPLATE_PARAMETERS___
             "paramName": "microsoftReturnParameter",
             "paramValue": "items",
             "type": "EQUALS"
+          },
+          {
+            "paramName": "pinterestReturnParameter",
+            "paramValue": "contents",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "pinterestReturnParameter",
+            "paramValue": "num_items",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "pinterestReturnParameter",
+            "paramValue": "value",
+            "type": "EQUALS"
           }
         ],
         "valueValidators": [
@@ -529,6 +605,11 @@ ___TEMPLATE_PARAMETERS___
             "paramName": "microsoftReturnParameter",
             "paramValue": "items",
             "type": "EQUALS"
+          },
+          {
+            "paramName": "pinterestReturnParameter",
+            "paramValue": "contents",
+            "type": "EQUALS"
           }
         ],
         "valueValidators": [
@@ -556,6 +637,11 @@ ___TEMPLATE_PARAMETERS___
           },
           {
             "paramName": "twitterReturnParameter",
+            "paramValue": "contents",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "pinterestReturnParameter",
             "paramValue": "contents",
             "type": "EQUALS"
           }
@@ -679,6 +765,7 @@ const optionalData = data.optionalData? makeTableMap(data.optionalData,'optional
 const task = {};
 let formattedArray;
 const inputArray = data.inputArray;
+    
 
 task.meta = {
   content_ids : getIdsArray,
@@ -711,6 +798,13 @@ task.microsoft = {
   items: getMicrosoftItems,
   value: getTotalValue,
   item_ids: getIdsArray
+};
+
+task.pinterest = {
+  contents: getPinterestContents,
+  value: getTotalValue,
+  num_items: getNumberOfItems,
+  content_ids: getIdsArray
 };
 
 
@@ -809,6 +903,19 @@ function getMicrosoftItems(inputArray) {
     'price': item[keyPrice],
     'name': item[keyName],
     'quantity': item[keyQuantity]
+  };
+ });
+}
+
+function getPinterestContents(){
+ return inputArray.map((item) => {  
+  return {
+    'id': item[keyId],
+    'item_price': item[keyPrice],
+    'item_name': item[keyName],
+    'quantity': item[keyQuantity],
+    'item_category': item[lastCategory],
+    'item_brand': item[keyBrand]
   };
  });
 }
@@ -1119,6 +1226,6 @@ setup: |-
 
 ___NOTES___
 
-Created on 23/10/2025, 10:00:27
+Created on 23/10/2025, 10:24:49
 
 

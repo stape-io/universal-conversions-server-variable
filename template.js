@@ -7,6 +7,8 @@ const makeTableMap = require('makeTableMap');
 const Object = require('Object');
 
 
+
+//let inputArray = data.inputArray;
 const platform = data.platform;
 const keyId = data.keyId;
 const keyBrand = data.keyBrand;
@@ -21,6 +23,7 @@ const optionalData = data.optionalData? makeTableMap(data.optionalData,'optional
 const task = {};
 let formattedArray;
 const inputArray = data.inputArray;
+    
 
 task.meta = {
   content_ids : getIdsArray,
@@ -53,6 +56,13 @@ task.microsoft = {
   items: getMicrosoftItems,
   value: getTotalValue,
   item_ids: getIdsArray
+};
+
+task.pinterest = {
+  contents: getPinterestContents,
+  value: getTotalValue,
+  num_items: getNumberOfItems,
+  content_ids: getIdsArray
 };
 
 
@@ -151,6 +161,19 @@ function getMicrosoftItems(inputArray) {
     'price': item[keyPrice],
     'name': item[keyName],
     'quantity': item[keyQuantity]
+  };
+ });
+}
+
+function getPinterestContents(){
+ return inputArray.map((item) => {  
+  return {
+    'id': item[keyId],
+    'item_price': item[keyPrice],
+    'item_name': item[keyName],
+    'quantity': item[keyQuantity],
+    'item_category': item[lastCategory],
+    'item_brand': item[keyBrand]
   };
  });
 }
