@@ -7,8 +7,6 @@ const makeTableMap = require('makeTableMap');
 const Object = require('Object');
 
 
-
-//let inputArray = data.inputArray;
 const platform = data.platform;
 const keyId = data.keyId;
 const keyBrand = data.keyBrand;
@@ -51,7 +49,17 @@ task.twitter ={
   number_items: getNumberOfItems
 };
 
-    
+task.microsoft = {
+  items: getMicrosoftItems,
+  value: getTotalValue,
+  item_ids: getIdsArray
+};
+
+
+/* Main Logic */
+if(getType(inputArray) != 'array' || inputArray.length == 0) return;
+formattedArray = task[platform][returnParameter](inputArray);
+return formattedArray;
 
 
 /* Helper Functions */
@@ -90,9 +98,6 @@ function getMetaContents(array){
   return contents;
 }
 
-
-
-
 function setGA4Categories(targetItem,item) {
   if(keyCategory.length == 0) return;
   keyCategory.forEach((category,index) => {
@@ -101,7 +106,6 @@ function setGA4Categories(targetItem,item) {
   });
   return targetItem;
 }
-
 
 function getGA4Items(inputArray){
  return inputArray.map(item => { 
@@ -117,7 +121,6 @@ function getGA4Items(inputArray){
  });
 }
 
-
 function getTikTokContents (inputArray) {
  return inputArray.map((item) => {
   return {
@@ -130,7 +133,6 @@ function getTikTokContents (inputArray) {
  });
 }
 
-
 function getTwitterContents(inputArray) {
  return inputArray.map((item) => {  
   return {
@@ -142,8 +144,14 @@ function getTwitterContents(inputArray) {
  });
 }
 
+function getMicrosoftItems(inputArray) {
+ return inputArray.map((item) => {  
+  return {
+    'id': item[keyId],
+    'price': item[keyPrice],
+    'name': item[keyName],
+    'quantity': item[keyQuantity]
+  };
+ });
+}
 
-/* Main Logic */
-if(getType(inputArray) != 'array' || inputArray.length == 0) return;
-formattedArray = task[platform][returnParameter](inputArray);
-return formattedArray;

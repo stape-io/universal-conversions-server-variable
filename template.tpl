@@ -246,6 +246,37 @@ ___TEMPLATE_PARAMETERS___
             "type": "EQUALS"
           }
         ]
+      },
+      {
+        "type": "RADIO",
+        "name": "microsoftReturnParameter",
+        "displayName": "",
+        "radioItems": [
+          {
+            "value": "items",
+            "displayValue": "items",
+            "help": "Returns the required parameter \u003cstrong\u003e items \u003c/strong\u003e. \u003cbr\u003e Take a look at the \u003ca href\u003d\"https://learn.microsoft.com/pt-pt/advertising/guides/uet-conversion-api-integration?view\u003dbingads-13\"\u003e official documentation\u003c/a\u003e for more information.",
+            "subParams": []
+          },
+          {
+            "value": "value",
+            "displayValue": "value",
+            "help": "Returns the \u003cstrong\u003e total value \u003c/strong\u003e of the products in the Input Array, disregarding any discounts. \u003cbr\u003e Take a look at the \u003ca href\u003d\"https://learn.microsoft.com/pt-pt/advertising/guides/uet-conversion-api-integration?view\u003dbingads-13\"\u003e official documentation\u003c/a\u003e for more information."
+          },
+          {
+            "value": "item_ids",
+            "displayValue": "itemIds",
+            "help": "Returns a list of \u003cstrong\u003e IDs \u003c/strong\u003e. \u003cbr\u003e Take a look at the \u003ca href\u003d\"https://learn.microsoft.com/pt-pt/advertising/guides/uet-conversion-api-integration?view\u003dbingads-13\"\u003e official documentation\u003c/a\u003e for more information."
+          }
+        ],
+        "simpleValueType": true,
+        "enablingConditions": [
+          {
+            "paramName": "platform",
+            "paramValue": "microsoft",
+            "type": "EQUALS"
+          }
+        ]
       }
     ]
   },
@@ -289,6 +320,16 @@ ___TEMPLATE_PARAMETERS___
           {
             "paramName": "twitterReturnParameter",
             "paramValue": "contents",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "microsoftReturnParameter",
+            "paramValue": "item_ids",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "microsoftReturnParameter",
+            "paramValue": "items",
             "type": "EQUALS"
           }
         ],
@@ -360,6 +401,16 @@ ___TEMPLATE_PARAMETERS___
             "paramName": "twitterReturnParameter",
             "paramValue": "value",
             "type": "EQUALS"
+          },
+          {
+            "paramName": "microsoftReturnParameter",
+            "paramValue": "value",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "microsoftReturnParameter",
+            "paramValue": "items",
+            "type": "EQUALS"
           }
         ],
         "valueValidators": [
@@ -424,6 +475,16 @@ ___TEMPLATE_PARAMETERS___
             "paramName": "twitterReturnParameter",
             "paramValue": "value",
             "type": "EQUALS"
+          },
+          {
+            "paramName": "microsoftReturnParameter",
+            "paramValue": "value",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "microsoftReturnParameter",
+            "paramValue": "items",
+            "type": "EQUALS"
           }
         ],
         "valueValidators": [
@@ -462,6 +523,11 @@ ___TEMPLATE_PARAMETERS___
           {
             "paramName": "twitterReturnParameter",
             "paramValue": "contents",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "microsoftReturnParameter",
+            "paramValue": "items",
             "type": "EQUALS"
           }
         ],
@@ -641,7 +707,17 @@ task.twitter ={
   number_items: getNumberOfItems
 };
 
-    
+task.microsoft = {
+  items: getMicrosoftItems,
+  value: getTotalValue,
+  item_ids: getIdsArray
+};
+
+
+/* Main Logic */
+if(getType(inputArray) != 'array' || inputArray.length == 0) return;
+formattedArray = task[platform][returnParameter](inputArray);
+return formattedArray;
 
 
 /* Helper Functions */
@@ -680,9 +756,6 @@ function getMetaContents(array){
   return contents;
 }
 
-
-
-
 function setGA4Categories(targetItem,item) {
   if(keyCategory.length == 0) return;
   keyCategory.forEach((category,index) => {
@@ -691,7 +764,6 @@ function setGA4Categories(targetItem,item) {
   });
   return targetItem;
 }
-
 
 function getGA4Items(inputArray){
  return inputArray.map(item => { 
@@ -707,7 +779,6 @@ function getGA4Items(inputArray){
  });
 }
 
-
 function getTikTokContents (inputArray) {
  return inputArray.map((item) => {
   return {
@@ -720,7 +791,6 @@ function getTikTokContents (inputArray) {
  });
 }
 
-
 function getTwitterContents(inputArray) {
  return inputArray.map((item) => {  
   return {
@@ -732,11 +802,16 @@ function getTwitterContents(inputArray) {
  });
 }
 
-
-/* Main Logic */
-if(getType(inputArray) != 'array' || inputArray.length == 0) return;
-formattedArray = task[platform][returnParameter](inputArray);
-return formattedArray;
+function getMicrosoftItems(inputArray) {
+ return inputArray.map((item) => {  
+  return {
+    'id': item[keyId],
+    'price': item[keyPrice],
+    'name': item[keyName],
+    'quantity': item[keyQuantity]
+  };
+ });
+}
 
 
 ___SERVER_PERMISSIONS___
@@ -1044,6 +1119,6 @@ setup: |-
 
 ___NOTES___
 
-Created on 23/10/2025, 09:29:28
+Created on 23/10/2025, 10:00:27
 
 
