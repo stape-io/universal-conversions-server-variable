@@ -24,7 +24,6 @@ let formattedArray;
 const inputArray = data.getGa4Items? getEventData('items') : data.inputArray;
 
 
-
 task.meta = {
   content_ids : getIdsArray,
   value :  getTotalValue,
@@ -79,6 +78,11 @@ task.reddit = {
   products: getRedditProducts,
   value: getTotalValue,
   item_count: getNumberOfItems,
+};
+
+task.googleAdsOffline = {
+  items: getGoogleAdsItems,
+  value: getTotalValue
 };
 
 
@@ -203,4 +207,14 @@ function getRedditProducts(){
     'category': item[lastCategory]
   };
  });
+}
+
+function getGoogleAdsItems(){
+ return inputArray.map((item) => {  
+  return {
+    'productId': item[keyId],
+    'unitPrice': item[keyPrice],
+    'quantity': item[keyName],
+  };
+ });  
 }

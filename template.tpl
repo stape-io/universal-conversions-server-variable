@@ -199,6 +199,32 @@ ___TEMPLATE_PARAMETERS___
       },
       {
         "type": "RADIO",
+        "name": "googleAdsOfflineReturnParameter",
+        "displayName": "",
+        "radioItems": [
+          {
+            "value": "value",
+            "displayValue": "conversionValue",
+            "help": "Returns the total value of the products in the Input Array.\u003cbr\u003e\nTake a look at \u003ca href\u003d\"https://developers.google.com/google-ads/api/reference/rpc/v22/ConversionUploadService/UploadClickConversions?transport\u003drest\"\u003e official documentation\u003c/a\u003e for more information.",
+            "subParams": []
+          },
+          {
+            "value": "items",
+            "displayValue": "items",
+            "help": "Returns a list of product objects as described in \u003ca href\u003d\"https://developers.google.com/google-ads/api/reference/rpc/v22/ConversionUploadService/UploadClickConversions?transport\u003drest\" /a\u003e official documentation\u003c/a\u003e as of October 2025. \u003cbr\u003e\nThe list below shows only required parameters. In order to add more parameters use the \u003cstrong\u003eAddtitional/Optional Parameters Section\u003c/strong\u003e"
+          }
+        ],
+        "simpleValueType": true,
+        "enablingConditions": [
+          {
+            "paramName": "platform",
+            "paramValue": "googleAdsOffline",
+            "type": "EQUALS"
+          }
+        ]
+      },
+      {
+        "type": "RADIO",
         "name": "tiktokReturnParameter",
         "displayName": "",
         "radioItems": [
@@ -480,6 +506,11 @@ ___TEMPLATE_PARAMETERS___
             "paramName": "redditReturnParameter",
             "paramValue": "products",
             "type": "EQUALS"
+          },
+          {
+            "paramName": "googleAdsOfflineReturnParameter",
+            "paramValue": "items",
+            "type": "EQUALS"
           }
         ],
         "help": "Input Array key for item \u003cstrong\u003eunique identifier\u003c/strong\u003e",
@@ -588,6 +619,16 @@ ___TEMPLATE_PARAMETERS___
           },
           {
             "paramName": "redditReturnParameter",
+            "paramValue": "value",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "googleAdsOfflineReturnParameter",
+            "paramValue": "items",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "googleAdsOfflineReturnParameter",
             "paramValue": "value",
             "type": "EQUALS"
           }
@@ -704,6 +745,16 @@ ___TEMPLATE_PARAMETERS___
             "paramName": "redditReturnParameter",
             "paramValue": "item_count",
             "type": "EQUALS"
+          },
+          {
+            "paramName": "googleAdsOfflineReturnParameter",
+            "paramValue": "items",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "googleAdsOfflineReturnParameter",
+            "paramValue": "value",
+            "type": "EQUALS"
           }
         ],
         "valueValidators": [
@@ -807,6 +858,13 @@ ___TEMPLATE_PARAMETERS___
         "valueValidators": [],
         "lineCount": 2,
         "textAsList": true
+      }
+    ],
+    "enablingConditions": [
+      {
+        "paramName": "getGa4Items",
+        "paramValue": true,
+        "type": "NOT_EQUALS"
       }
     ]
   },
@@ -924,7 +982,6 @@ let formattedArray;
 const inputArray = data.getGa4Items? getEventData('items') : data.inputArray;
 
 
-
 task.meta = {
   content_ids : getIdsArray,
   value :  getTotalValue,
@@ -979,6 +1036,11 @@ task.reddit = {
   products: getRedditProducts,
   value: getTotalValue,
   item_count: getNumberOfItems,
+};
+
+task.googleAdsOffline = {
+  items: getGoogleAdsItems,
+  value: getTotalValue
 };
 
 
@@ -1103,6 +1165,16 @@ function getRedditProducts(){
     'category': item[lastCategory]
   };
  });
+}
+
+function getGoogleAdsItems(){
+ return inputArray.map((item) => {  
+  return {
+    'productId': item[keyId],
+    'unitPrice': item[keyPrice],
+    'quantity': item[keyName],
+  };
+ });  
 }
 
 
@@ -1444,6 +1516,6 @@ setup: |-
 
 ___NOTES___
 
-Created on 23/10/2025, 15:46:46
+Created on 24/10/2025, 07:29:59
 
 
