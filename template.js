@@ -5,6 +5,7 @@ const getType = require('getType');
 const Math = require('Math');
 const makeTableMap = require('makeTableMap');
 const Object = require('Object');
+const JSON = require('JSON');
 const getEventData = require('getEventData');
 
 
@@ -14,7 +15,7 @@ const keyBrand = data.keyBrand;
 const keyPrice = data.keyPrice;
 const keyQuantity = data.keyQuantity;
 const keyCategory = data.keyCategory;
-const lastCategory = keyCategory ? keyCategory.reverse()[0] : undefined;
+const lastCategory = keyCategory ? JSON.parse(JSON.stringify(keyCategory)).reverse()[0] : []; //Force deep copy to avoid array destruction from reverse method
 const keyName = data.keyName;
 const returnParameter = data[platform+"ReturnParameter"];
 const round = Math.round;
@@ -86,6 +87,13 @@ task.googleAdsOffline = {
 };
 
 
+task.criteo = {
+  item: getCriteoIds,
+  price: getCriteoPrices,
+  quantity: getCriteoQuantities,
+  category: getCriteoCategories
+};
+
 /* Main Logic */
 if(getType(inputArray) != 'array' || inputArray.length == 0) return;
 formattedArray = task[platform][returnParameter](inputArray);
@@ -117,8 +125,8 @@ function setAdditionalParameters (targetItem,item,optionalData) {
   return targetItem;
 }
 
-function getMetaContents(array){
-  const contents = array.map(item => {
+function getMetaContents(inputArray){
+  const contents = inputArray.map(item => {
     return {
       'id': item[keyId],
       'quantity': item[keyQuantity],
@@ -185,7 +193,7 @@ function getMicrosoftItems(inputArray) {
  });
 }
 
-function getPinterestContents(){
+function getPinterestContents(inputArray){
  return inputArray.map((item) => {  
   return {
     'id': item[keyId],
@@ -198,7 +206,7 @@ function getPinterestContents(){
  });
 }
 
-function getRedditProducts(){
+function getRedditProducts(inputArray){
  return inputArray.map((item) => {  
   return {
     'id': item[keyId],
@@ -209,7 +217,7 @@ function getRedditProducts(){
  });
 }
 
-function getGoogleAdsItems(){
+function getGoogleAdsItems(inputArray){
  return inputArray.map((item) => {  
   return {
     'productId': item[keyId],
@@ -217,4 +225,24 @@ function getGoogleAdsItems(){
     'quantity': item[keyName],
   };
  });  
+}
+
+function getCriteoPrices(inputArray){
+  if(inputArray.length == 1) return inputArray[0][keyPrice];
+  return inputArray.map((item) => makeString(item[keyPrice])).join("|");
+}
+
+function getCriteoIds(inputArray){
+  if(inputArray.length == 1) return inputArray[0][keyId];
+  return inputArray.map((item) => makeString(item[keyId])).join("|");
+}
+
+function getCriteoQuantities(inputArray){
+  return inputArray.map((item) => makeString(item[keyQuantity])).join("|");
+}
+
+function getCriteoCategories(inputArray){
+  if(keyCategory.length == 0) return;
+  if(getType(inputArray[0][lastCategory]) === 'array') return inputArray[0][lastCategory].join(">");
+  return keyCategory.length == 1? inputArray[0][lastCategory] : keyCategory.map(category => inputArray[0][category]).join(">");
 }

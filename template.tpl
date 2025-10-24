@@ -427,6 +427,41 @@ ___TEMPLATE_PARAMETERS___
             "type": "EQUALS"
           }
         ]
+      },
+      {
+        "type": "RADIO",
+        "name": "criteoReturnParameter",
+        "displayName": "",
+        "radioItems": [
+          {
+            "value": "item",
+            "displayValue": "item",
+            "help": "Returns a list of product IDs as described in \u003ca href\u003d\"https://developers.criteo.com/retailer-integration/docs/order-confirmation-page\"\u003e official documentation\u003c/a\u003e as of October 2025."
+          },
+          {
+            "value": "price",
+            "displayValue": "price",
+            "help": "Returns a string of item prices, as described in \u003ca href\u003d\"https://developers.criteo.com/retailer-integration/docs/order-confirmation-page\"\u003e official documentation\u003c/a\u003e as of October 2025."
+          },
+          {
+            "value": "quantity",
+            "displayValue": "quantity",
+            "help": "Returns a string representing the quantities of each item separated by pipe. \u003cbr\u003e\nFor more information see description in \u003ca href\u003d\"https://developers.criteo.com/retailer-integration/docs/order-confirmation-page\"\u003e official documentation\u003c/a\u003e as of October 2025."
+          },
+          {
+            "value": "category",
+            "displayValue": "category",
+            "help": "Builds the category breadcrumbs for PDP event, as described in \u003ca href\u003d\"https://developers.criteo.com/retailer-integration/docs/product-details-page\"\u003e official documentation\u003c/a\u003e as of October 2025."
+          }
+        ],
+        "simpleValueType": true,
+        "enablingConditions": [
+          {
+            "paramName": "platform",
+            "paramValue": "criteo",
+            "type": "EQUALS"
+          }
+        ]
       }
     ]
   },
@@ -510,6 +545,11 @@ ___TEMPLATE_PARAMETERS___
           {
             "paramName": "googleAdsOfflineReturnParameter",
             "paramValue": "items",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "criteoReturnParameter",
+            "paramValue": "item",
             "type": "EQUALS"
           }
         ],
@@ -630,6 +670,11 @@ ___TEMPLATE_PARAMETERS___
           {
             "paramName": "googleAdsOfflineReturnParameter",
             "paramValue": "value",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "criteoReturnParameter",
+            "paramValue": "price",
             "type": "EQUALS"
           }
         ],
@@ -755,6 +800,11 @@ ___TEMPLATE_PARAMETERS___
             "paramName": "googleAdsOfflineReturnParameter",
             "paramValue": "value",
             "type": "EQUALS"
+          },
+          {
+            "paramName": "criteoReturnParameter",
+            "paramValue": "quantity",
+            "type": "EQUALS"
           }
         ],
         "valueValidators": [
@@ -852,6 +902,11 @@ ___TEMPLATE_PARAMETERS___
           {
             "paramName": "redditReturnParameter",
             "paramValue": "products",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "criteoReturnParameter",
+            "paramValue": "category",
             "type": "EQUALS"
           }
         ],
@@ -963,6 +1018,7 @@ const getType = require('getType');
 const Math = require('Math');
 const makeTableMap = require('makeTableMap');
 const Object = require('Object');
+const JSON = require('JSON');
 const getEventData = require('getEventData');
 
 
@@ -972,7 +1028,7 @@ const keyBrand = data.keyBrand;
 const keyPrice = data.keyPrice;
 const keyQuantity = data.keyQuantity;
 const keyCategory = data.keyCategory;
-const lastCategory = keyCategory ? keyCategory.reverse()[0] : undefined;
+const lastCategory = keyCategory ? JSON.parse(JSON.stringify(keyCategory)).reverse()[0] : []; //Force deep copy to avoid array destruction from reverse method
 const keyName = data.keyName;
 const returnParameter = data[platform+"ReturnParameter"];
 const round = Math.round;
@@ -1044,6 +1100,13 @@ task.googleAdsOffline = {
 };
 
 
+task.criteo = {
+  item: getCriteoIds,
+  price: getCriteoPrices,
+  quantity: getCriteoQuantities,
+  category: getCriteoCategories
+};
+
 /* Main Logic */
 if(getType(inputArray) != 'array' || inputArray.length == 0) return;
 formattedArray = task[platform][returnParameter](inputArray);
@@ -1075,8 +1138,8 @@ function setAdditionalParameters (targetItem,item,optionalData) {
   return targetItem;
 }
 
-function getMetaContents(array){
-  const contents = array.map(item => {
+function getMetaContents(inputArray){
+  const contents = inputArray.map(item => {
     return {
       'id': item[keyId],
       'quantity': item[keyQuantity],
@@ -1143,7 +1206,7 @@ function getMicrosoftItems(inputArray) {
  });
 }
 
-function getPinterestContents(){
+function getPinterestContents(inputArray){
  return inputArray.map((item) => {  
   return {
     'id': item[keyId],
@@ -1156,7 +1219,7 @@ function getPinterestContents(){
  });
 }
 
-function getRedditProducts(){
+function getRedditProducts(inputArray){
  return inputArray.map((item) => {  
   return {
     'id': item[keyId],
@@ -1167,7 +1230,7 @@ function getRedditProducts(){
  });
 }
 
-function getGoogleAdsItems(){
+function getGoogleAdsItems(inputArray){
  return inputArray.map((item) => {  
   return {
     'productId': item[keyId],
@@ -1175,6 +1238,26 @@ function getGoogleAdsItems(){
     'quantity': item[keyName],
   };
  });  
+}
+
+function getCriteoPrices(inputArray){
+  if(inputArray.length == 1) return inputArray[0][keyPrice];
+  return inputArray.map((item) => makeString(item[keyPrice])).join("|");
+}
+
+function getCriteoIds(inputArray){
+  if(inputArray.length == 1) return inputArray[0][keyId];
+  return inputArray.map((item) => makeString(item[keyId])).join("|");
+}
+
+function getCriteoQuantities(inputArray){
+  return inputArray.map((item) => makeString(item[keyQuantity])).join("|");
+}
+
+function getCriteoCategories(inputArray){
+  if(keyCategory.length == 0) return;
+  if(getType(inputArray[0][lastCategory]) === 'array') return inputArray[0][lastCategory].join(">");
+  return keyCategory.length == 1? inputArray[0][lastCategory] : keyCategory.map(category => inputArray[0][category]).join(">");
 }
 
 
@@ -1516,6 +1599,6 @@ setup: |-
 
 ___NOTES___
 
-Created on 24/10/2025, 07:29:59
+Created on 24/10/2025, 08:41:44
 
 
