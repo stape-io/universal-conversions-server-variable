@@ -482,6 +482,44 @@ ___TEMPLATE_PARAMETERS___
             "type": "EQUALS"
           }
         ]
+      },
+      {
+        "type": "RADIO",
+        "name": "klaviyoReturnParameter",
+        "displayName": "",
+        "radioItems": [
+          {
+            "value": "items",
+            "displayValue": "items",
+            "help": "Returns a list of product objects as described in \u003ca href\u003d\"https://developers.klaviyo.com/en/docs/guide_to_integrating_a_platform_without_a_pre_built_klaviyo_integration#active-on-site-tracking-snippet\"\u003e official documentation\u003c/a\u003e as of October 2025."
+          },
+          {
+            "value": "item",
+            "displayValue": "item",
+            "help": "Returns a list of one product object as described in \u003ca href\u003d\"https://developers.klaviyo.com/en/docs/guide_to_integrating_a_platform_without_a_pre_built_klaviyo_integration#active-on-site-tracking-snippet\"\u003e official documentation\u003c/a\u003e as of October 2025.",
+            "subParams": [
+              {
+                "type": "CHECKBOX",
+                "name": "encloseInArray",
+                "checkboxText": "Enclose output item object in an Array?",
+                "simpleValueType": true
+              }
+            ]
+          },
+          {
+            "value": "value",
+            "displayValue": "value",
+            "help": "Returns the total event value as described in \u003ca href\u003d\"https://developers.klaviyo.com/en/docs/guide_to_integrating_a_platform_without_a_pre_built_klaviyo_integration#active-on-site-tracking-snippet\"\u003e official documentation\u003c/a\u003e as of October 2025."
+          }
+        ],
+        "simpleValueType": true,
+        "enablingConditions": [
+          {
+            "paramName": "platform",
+            "paramValue": "klaviyo",
+            "type": "EQUALS"
+          }
+        ]
       }
     ]
   },
@@ -574,6 +612,11 @@ ___TEMPLATE_PARAMETERS___
           },
           {
             "paramName": "rakutenReturnParameter",
+            "paramValue": "items",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "klaviyoReturnParameter",
             "paramValue": "items",
             "type": "EQUALS"
           }
@@ -704,6 +747,11 @@ ___TEMPLATE_PARAMETERS___
           },
           {
             "paramName": "rakutenReturnParameter",
+            "paramValue": "items",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "klaviyoReturnParameter",
             "paramValue": "items",
             "type": "EQUALS"
           }
@@ -840,6 +888,11 @@ ___TEMPLATE_PARAMETERS___
             "paramName": "rakutenReturnParameter",
             "paramValue": "items",
             "type": "EQUALS"
+          },
+          {
+            "paramName": "klaviyoReturnParameter",
+            "paramValue": "items",
+            "type": "EQUALS"
           }
         ],
         "valueValidators": [
@@ -904,11 +957,34 @@ ___TEMPLATE_PARAMETERS___
             "paramName": "rakutenReturnParameter",
             "paramValue": "items",
             "type": "EQUALS"
+          },
+          {
+            "paramName": "klaviyoReturnParameter",
+            "paramValue": "items",
+            "type": "EQUALS"
           }
         ],
         "valueValidators": [
           {
             "type": "NON_EMPTY"
+          }
+        ]
+      },
+      {
+        "type": "TEXT",
+        "name": "keyImg",
+        "displayName": "Image URL",
+        "simpleValueType": true,
+        "enablingConditions": [
+          {
+            "paramName": "klaviyoReturnParameter",
+            "paramValue": "item",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "klaviyoReturnParameter",
+            "paramValue": "items",
+            "type": "EQUALS"
           }
         ]
       },
@@ -957,6 +1033,11 @@ ___TEMPLATE_PARAMETERS___
               },
               {
                 "paramName": "rakutenReturnParameter",
+                "paramValue": "items",
+                "type": "EQUALS"
+              },
+              {
+                "paramName": "klaviyoReturnParameter",
                 "paramValue": "items",
                 "type": "EQUALS"
               }
@@ -1080,13 +1161,6 @@ ___TEMPLATE_PARAMETERS___
         "checkboxText": "Output stringified JSON?",
         "simpleValueType": true,
         "help": "Check this box to return the \u003cstrong\u003eJSON.stringify\u003c/strong\u003e version of the output"
-      },
-      {
-        "type": "CHECKBOX",
-        "name": "stringifyEveryValue",
-        "checkboxText": "Stringify every output parameter value?",
-        "simpleValueType": true,
-        "help": "Check this box to have every parameter value casted to String"
       }
     ]
   }
@@ -1114,6 +1188,7 @@ const keyBrand = useGa4Array ? 'item_brand' : data.keyBrand;
 const keyPrice = useGa4Array ? 'price' : data.keyPrice;
 const keyQuantity = useGa4Array ? 'quantity' : data.keyQuantity;
 const keyName = useGa4Array ? 'item_name' : data.keyName;
+const keyImg = data.keyImg;
 let keyCategory = data.keyCategory || [];
 const lastCategory = keyCategory ? JSON.parse(JSON.stringify(keyCategory)).reverse()[0] : []; //Force deep copy to avoid array destruction from reverse method
 const returnParameter = data[platform + 'ReturnParameter'];
@@ -1193,6 +1268,12 @@ task.rakuten = {
   items: getRakutenLineitems
 };
 
+task.klaviyo = {
+  items: getKlaviyoItems,
+  item: getKlaviyoItems,
+  value: getTotalValue
+};
+
 /* Main Logic */
 if (getType(inputArray) != 'array' || inputArray.length == 0) return;
 return jsonOutput ? JSON.stringify(task[platform][returnParameter](inputArray)) : task[platform][returnParameter](inputArray);
@@ -1244,6 +1325,14 @@ function getGa4CategoryKeys(item) {
     keyCategory = categoryKeys.map((category, index) => category[0]);
   }
   return keyCategory;
+}
+
+function getGa4CategoryValues(item) {
+  if (useGa4Array) {
+    var categoryKeys = Object.entries(item).filter((item) => testRegex(categoryRegex, item[0]));
+    var categoryValuesArray = categoryKeys.map((category, index) => category[1]);
+  }
+  return categoryValuesArray;
 }
 
 function setGA4Categories(targetItem, item) {
@@ -1409,6 +1498,40 @@ function getRakutenLineitems(inputArray) {
     return formattedItem;
   });
   return formattedItems;
+}
+
+function getKlaviyoItems(inputArray) {
+  inputArray = data.klaviyoReturnParameter === 'item' ? [inputArray[0]] : inputArray;
+  let formattedItems = inputArray.map((item) => {
+    let formattedItem = {
+      ProductID: item[keyId],
+      ProductName: item[keyName],
+      Quantity: item[keyQuantity],
+      ItemPrice: item[keyPrice],
+      ImageURL: item[keyImg]
+    };
+    if (useGa4Array) {
+      keyCategory = getGa4CategoryKeys(item);
+    } 
+
+    if (keyCategory.length == 0) keyCategory = keyCategory;
+
+    if (keyCategory.length == 1 && getType(item[keyCategory[0]]) === 'array') {
+      formattedItem.Categories = item[keyCategory[0]];
+    }
+
+    if (keyCategory.length == 1 && getType(item[keyCategory[0]]) !== 'array') {
+      formattedItem.Categories = keyCategory.map((category) => item[category]);
+    }
+
+    if (keyCategory.length > 1 && getType(item[keyCategory]) !== 'array') {
+      formattedItem.Categories = keyCategory.map((category) => item[category]);
+    }
+    if(optionalData) setAdditionalParameters(formattedItem, item, optionalData); 
+    return formattedItem;
+  });
+    if(inputArray.length == 1) return data.encloseInArray ? [formattedItems[0]] : formattedItems[0];
+    return data.encloseInArray ? [formattedItems] : formattedItems;
 }
 
 
@@ -1750,6 +1873,6 @@ setup: |-
 
 ___NOTES___
 
-Created on 28/10/2025, 14:59:59
+Created on 29/10/2025, 10:16:51
 
 

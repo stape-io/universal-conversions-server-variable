@@ -17,6 +17,7 @@ const keyBrand = useGa4Array ? 'item_brand' : data.keyBrand;
 const keyPrice = useGa4Array ? 'price' : data.keyPrice;
 const keyQuantity = useGa4Array ? 'quantity' : data.keyQuantity;
 const keyName = useGa4Array ? 'item_name' : data.keyName;
+const keyImg = data.keyImg;
 let keyCategory = data.keyCategory || [];
 const lastCategory = keyCategory ? JSON.parse(JSON.stringify(keyCategory)).reverse()[0] : []; //Force deep copy to avoid array destruction from reverse method
 const returnParameter = data[platform + 'ReturnParameter'];
@@ -95,6 +96,12 @@ task.rakuten = {
   items: getRakutenLineitems
 };
 
+task.klaviyo = {
+  items: getKlaviyoItems,
+  item: getKlaviyoItems,
+  value: getTotalValue
+};
+
 /* Main Logic */
 if (getType(inputArray) != 'array' || inputArray.length == 0) return;
 return jsonOutput ? JSON.stringify(task[platform][returnParameter](inputArray)) : task[platform][returnParameter](inputArray);
@@ -146,6 +153,14 @@ function getGa4CategoryKeys(item) {
     keyCategory = categoryKeys.map((category, index) => category[0]);
   }
   return keyCategory;
+}
+
+function getGa4CategoryValues(item) {
+  if (useGa4Array) {
+    var categoryKeys = Object.entries(item).filter((item) => testRegex(categoryRegex, item[0]));
+    var categoryValuesArray = categoryKeys.map((category, index) => category[1]);
+  }
+  return categoryValuesArray;
 }
 
 function setGA4Categories(targetItem, item) {
@@ -311,4 +326,38 @@ function getRakutenLineitems(inputArray) {
     return formattedItem;
   });
   return formattedItems;
+}
+
+function getKlaviyoItems(inputArray) {
+  inputArray = data.klaviyoReturnParameter === 'item' ? [inputArray[0]] : inputArray;
+  let formattedItems = inputArray.map((item) => {
+    let formattedItem = {
+      ProductID: item[keyId],
+      ProductName: item[keyName],
+      Quantity: item[keyQuantity],
+      ItemPrice: item[keyPrice],
+      ImageURL: item[keyImg]
+    };
+    if (useGa4Array) {
+      keyCategory = getGa4CategoryKeys(item);
+    }
+
+    if (keyCategory.length == 0) keyCategory = keyCategory;
+
+    if (keyCategory.length == 1 && getType(item[keyCategory[0]]) === 'array') {
+      formattedItem.Categories = item[keyCategory[0]];
+    }
+
+    if (keyCategory.length == 1 && getType(item[keyCategory[0]]) !== 'array') {
+      formattedItem.Categories = keyCategory.map((category) => item[category]);
+    }
+
+    if (keyCategory.length > 1 && getType(item[keyCategory]) !== 'array') {
+      formattedItem.Categories = keyCategory.map((category) => item[category]);
+    }
+    if (optionalData) setAdditionalParameters(formattedItem, item, optionalData);
+    return formattedItem;
+  });
+  if (inputArray.length == 1) return data.encloseInArray ? [formattedItems[0]] : formattedItems[0];
+  return data.encloseInArray ? [formattedItems] : formattedItems;
 }
