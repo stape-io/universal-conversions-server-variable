@@ -1,5 +1,4 @@
-homepage: "https://stape.io/"
+homepage: 'https://stape.io/'
 versions:
-
-  - sha: <INITIAL RELEASE COMMIT HASH>
+  - sha: 24f5e23260feaa704257f7babf35f46fc300825c
     changeNotes: Initial release.
