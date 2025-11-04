@@ -26,40 +26,6 @@ ___TEMPLATE_PARAMETERS___
 [
   {
     "type": "GROUP",
-    "name": "input_array_group",
-    "displayName": "Input Array of Objects",
-    "groupStyle": "NO_ZIPPY",
-    "subParams": [
-      {
-        "type": "TEXT",
-        "name": "inputArray",
-        "displayName": "Input Array",
-        "simpleValueType": true,
-        "valueValidators": [
-          {
-            "type": "NON_EMPTY"
-          }
-        ],
-        "help": "Expected an array of product objects [{}].",
-        "alwaysInSummary": true,
-        "enablingConditions": [
-          {
-            "paramName": "getGa4Items",
-            "paramValue": true,
-            "type": "NOT_EQUALS"
-          }
-        ]
-      },
-      {
-        "type": "CHECKBOX",
-        "name": "getGa4Items",
-        "checkboxText": "Use GA4 items from Event Data?",
-        "simpleValueType": true
-      }
-    ]
-  },
-  {
-    "type": "GROUP",
     "name": "platform_group",
     "displayName": "Choose the Platform",
     "groupStyle": "NO_ZIPPY",
@@ -71,7 +37,7 @@ ___TEMPLATE_PARAMETERS___
         "selectItems": [
           {
             "value": "meta",
-            "displayValue": "Meta Conversions API v24"
+            "displayValue": "Meta Conversions API"
           },
           {
             "value": "ga4",
@@ -79,19 +45,19 @@ ___TEMPLATE_PARAMETERS___
           },
           {
             "value": "tiktok",
-            "displayValue": "TikTok Conversions API v2.0"
+            "displayValue": "TikTok Conversions API"
           },
           {
             "value": "twitter",
-            "displayValue": "Twitter/X Conversions API v12"
+            "displayValue": "Twitter/X Conversions API"
           },
           {
             "value": "microsoft",
-            "displayValue": "Microsoft Ads v13"
+            "displayValue": "Microsoft Ads"
           },
           {
             "value": "klaviyo",
-            "displayValue": "Klaviyo (version 2025-10-15)"
+            "displayValue": "Klaviyo"
           },
           {
             "value": "snapchat",
@@ -103,15 +69,15 @@ ___TEMPLATE_PARAMETERS___
           },
           {
             "value": "pinterest",
-            "displayValue": "Pinterest v5.21.0"
-          },
-          {
-            "value": "criteo",
-            "displayValue": "Criteo"
+            "displayValue": "Pinterest"
           },
           {
             "value": "rakuten",
             "displayValue": "Rakuten"
+          },
+          {
+            "value": "criteo",
+            "displayValue": "Criteo"
           },
           {
             "value": "reddit",
@@ -267,18 +233,18 @@ ___TEMPLATE_PARAMETERS___
           {
             "value": "contents",
             "displayValue": "contents",
-            "help": "Returns the required parameter \u003cstrong\u003e contents \u003c/strong\u003e. \u003cbr\u003e Take a look at \u003ca href\u003d\"https://business-api.tiktok.com/portal/docs?https://developer.x.com/en/docs/x-ads-api/measurement/web-conversions/api-reference/conversions\"\u003e official documentation\u003c/a\u003e for more information.",
+            "help": "Returns the required parameter \u003cstrong\u003e contents \u003c/strong\u003e. \u003cbr\u003e Take a look at \u003ca href\u003d\"https://developer.x.com/en/docs/x-ads-api/measurement/web-conversions/api-reference/conversions\"\u003e official documentation\u003c/a\u003e for more information.",
             "subParams": []
           },
           {
             "value": "value",
             "displayValue": "value",
-            "help": "Returns the \u003cstrong\u003e total value \u003c/strong\u003e of the products in the Input Array, disregarding any discounts. \u003cbr\u003e  Take a look at \u003ca href\u003d\"https://business-api.tiktok.com/portal/docs?https://developer.x.com/en/docs/x-ads-api/measurement/web-conversions/api-reference/conversions\"\u003e official documentation\u003c/a\u003e for more information."
+            "help": "Returns the \u003cstrong\u003e total value \u003c/strong\u003e of the products in the Input Array, disregarding any discounts. \u003cbr\u003e  Take a look at \u003ca href\u003d\"https://developer.x.com/en/docs/x-ads-api/measurement/web-conversions/api-reference/conversions\"\u003e official documentation\u003c/a\u003e for more information."
           },
           {
             "value": "number_items",
             "displayValue": "number_items",
-            "help": "Returns the \u003cstrong\u003e quantity of items \u003c/strong\u003e in the array. \u003cbr\u003e Take a look at \u003ca href\u003d\"https://business-api.tiktok.com/portal/docs?https://developer.x.com/en/docs/x-ads-api/measurement/web-conversions/api-reference/conversions\"\u003e official documentation\u003c/a\u003e for more information."
+            "help": "Returns the \u003cstrong\u003e quantity of items \u003c/strong\u003e in the array. \u003cbr\u003e Take a look at \u003ca href\u003d\"https://developer.x.com/en/docs/x-ads-api/measurement/web-conversions/api-reference/conversions\"\u003e official documentation\u003c/a\u003e for more information."
           }
         ],
         "simpleValueType": true,
@@ -298,18 +264,18 @@ ___TEMPLATE_PARAMETERS___
           {
             "value": "items",
             "displayValue": "items",
-            "help": "Returns the required parameter \u003cstrong\u003e items \u003c/strong\u003e. \u003cbr\u003e Take a look at the \u003ca href\u003d\"https://learn.microsoft.com/pt-pt/advertising/guides/uet-conversion-api-integration?view\u003dbingads-13\"\u003e official documentation\u003c/a\u003e for more information.",
+            "help": "Returns the required parameter \u003cstrong\u003e items \u003c/strong\u003e. \u003cbr\u003e Take a look at the \u003ca href\u003d\"https://learn.microsoft.com/en-us/advertising/guides/uet-conversion-api-integration?view\u003dbingads-13\"\u003e official documentation\u003c/a\u003e for more information.",
             "subParams": []
           },
           {
             "value": "value",
             "displayValue": "value",
-            "help": "Returns the \u003cstrong\u003e total value \u003c/strong\u003e of the products in the Input Array, disregarding any discounts. \u003cbr\u003e Take a look at the \u003ca href\u003d\"https://learn.microsoft.com/pt-pt/advertising/guides/uet-conversion-api-integration?view\u003dbingads-13\"\u003e official documentation\u003c/a\u003e for more information."
+            "help": "Returns the \u003cstrong\u003e total value \u003c/strong\u003e of the products in the Input Array, disregarding any discounts. \u003cbr\u003e Take a look at the \u003ca href\u003d\"https://learn.microsoft.com/en-us/advertising/guides/uet-conversion-api-integration?view\u003dbingads-13\"\u003e official documentation\u003c/a\u003e for more information."
           },
           {
             "value": "item_ids",
             "displayValue": "itemIds",
-            "help": "Returns a list of \u003cstrong\u003e IDs \u003c/strong\u003e. \u003cbr\u003e Take a look at the \u003ca href\u003d\"https://learn.microsoft.com/pt-pt/advertising/guides/uet-conversion-api-integration?view\u003dbingads-13\"\u003e official documentation\u003c/a\u003e for more information."
+            "help": "Returns a list of \u003cstrong\u003e IDs \u003c/strong\u003e. \u003cbr\u003e Take a look at the \u003ca href\u003d\"https://learn.microsoft.com/en-us/advertising/guides/uet-conversion-api-integration?view\u003dbingads-13\"\u003e official documentation\u003c/a\u003e for more information."
           }
         ],
         "simpleValueType": true,
@@ -365,7 +331,7 @@ ___TEMPLATE_PARAMETERS___
           {
             "value": "content_ids",
             "displayValue": "content_ids",
-            "help": "Returns an array of item ids. Be careful to use the correct \"content_type\" to match the input IDs this variable will return. Take a look at \u003ca href\u003d\"https://developers.facebook.com/docs/marketing-api/conversions-api/parameters/custom-data\"\u003e official documentation\u003c/a\u003e for more information.",
+            "help": "Returns an array of item ids. Be careful to use the correct \"content_type\" to match the input IDs this variable will return. Take a look at \u003ca href\u003d\"https://developers.snap.com/api/marketing-api/Conversions-API/Parameters\"\u003e official documentation\u003c/a\u003e for more information.",
             "subParams": []
           },
           {
@@ -525,6 +491,40 @@ ___TEMPLATE_PARAMETERS___
   },
   {
     "type": "GROUP",
+    "name": "input_array_group",
+    "displayName": "Input Array of Objects",
+    "groupStyle": "NO_ZIPPY",
+    "subParams": [
+      {
+        "type": "TEXT",
+        "name": "inputArray",
+        "displayName": "Input Array",
+        "simpleValueType": true,
+        "valueValidators": [
+          {
+            "type": "NON_EMPTY"
+          }
+        ],
+        "help": "Expected an array of product objects [{}].",
+        "alwaysInSummary": true,
+        "enablingConditions": [
+          {
+            "paramName": "getGa4Items",
+            "paramValue": true,
+            "type": "NOT_EQUALS"
+          }
+        ]
+      },
+      {
+        "type": "CHECKBOX",
+        "name": "getGa4Items",
+        "checkboxText": "Use GA4 items from Event Data?",
+        "simpleValueType": true
+      }
+    ]
+  },
+  {
+    "type": "GROUP",
     "name": "keys_group",
     "displayName": "Item Array Keys",
     "groupStyle": "ZIPPY_OPEN",
@@ -619,6 +619,11 @@ ___TEMPLATE_PARAMETERS___
             "paramName": "klaviyoReturnParameter",
             "paramValue": "items",
             "type": "EQUALS"
+          },
+          {
+            "paramName": "klaviyoReturnParameter",
+            "paramValue": "item",
+            "type": "EQUALS"
           }
         ],
         "help": "Input Array key for item \u003cstrong\u003eunique identifier\u003c/strong\u003e",
@@ -642,6 +647,16 @@ ___TEMPLATE_PARAMETERS___
           {
             "paramName": "pinterestReturnParameter",
             "paramValue": "contents",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "klaviyoReturnParameter",
+            "paramValue": "items",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "klaviyoReturnParameter",
+            "paramValue": "item",
             "type": "EQUALS"
           }
         ],
@@ -731,6 +746,11 @@ ___TEMPLATE_PARAMETERS___
             "type": "EQUALS"
           },
           {
+            "paramName": "redditReturnParameter",
+            "paramValue": "products",
+            "type": "EQUALS"
+          },
+          {
             "paramName": "googleAdsOfflineReturnParameter",
             "paramValue": "items",
             "type": "EQUALS"
@@ -753,6 +773,16 @@ ___TEMPLATE_PARAMETERS___
           {
             "paramName": "klaviyoReturnParameter",
             "paramValue": "items",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "klaviyoReturnParameter",
+            "paramValue": "item",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "klaviyoReturnParameter",
+            "paramValue": "value",
             "type": "EQUALS"
           }
         ],
@@ -893,6 +923,16 @@ ___TEMPLATE_PARAMETERS___
             "paramName": "klaviyoReturnParameter",
             "paramValue": "items",
             "type": "EQUALS"
+          },
+          {
+            "paramName": "klaviyoReturnParameter",
+            "paramValue": "item",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "klaviyoReturnParameter",
+            "paramValue": "value",
+            "type": "EQUALS"
           }
         ],
         "valueValidators": [
@@ -962,6 +1002,11 @@ ___TEMPLATE_PARAMETERS___
             "paramName": "klaviyoReturnParameter",
             "paramValue": "items",
             "type": "EQUALS"
+          },
+          {
+            "paramName": "klaviyoReturnParameter",
+            "paramValue": "item",
+            "type": "EQUALS"
           }
         ],
         "valueValidators": [
@@ -999,7 +1044,7 @@ ___TEMPLATE_PARAMETERS___
             "name": "keyCategory",
             "displayName": "Category",
             "simpleValueType": true,
-            "help": "Input Array key for item \u003cstrong\u003ecategories\u003c/strong\u003e. \u003cbr\u003e If you have multiple category key strings, add one per line as the example below, from broader on top to narrower on bottom:\n\u003cbr\u003e\n\u003cbr\u003e\n category_1 \u003cbr\u003e\n category_2 \u003cbr\u003e\n category_3 \u003cbr\u003e",
+            "help": "Input Array key for item \u003cstrong\u003ecategories\u003c/strong\u003e. This field supports a single category key, multiple category keys and an array of category keys.\u003cbr\u003e If you have multiple category key strings, add them comma separated, from broader on left to narrower on right:\n\u003cbr\u003e\u003cb\u003eExample for multiple category keys:\u003c/b\u003e\n\u003cbr\u003e\n category_1, category_2, category_3\n\u003cbr\u003e\n\u003cbr\u003e\u003cb\u003eExample for array of category keys:\u003c/b\u003e\n\u003cbr\u003e\n [category_1, category_2, category_3]",
             "enablingConditions": [
               {
                 "paramName": "ga4ReturnParameter",
@@ -1040,11 +1085,15 @@ ___TEMPLATE_PARAMETERS___
                 "paramName": "klaviyoReturnParameter",
                 "paramValue": "items",
                 "type": "EQUALS"
+              },
+              {
+                "paramName": "klaviyoReturnParameter",
+                "paramValue": "item",
+                "type": "EQUALS"
               }
             ],
             "valueValidators": [],
-            "lineCount": 2,
-            "textAsList": true
+            "textAsList": false
           },
           {
             "type": "CHECKBOX",
@@ -1123,7 +1172,7 @@ ___TEMPLATE_PARAMETERS___
           }
         ],
         "help": "Map here any additional properties you want to include in the returning array. This feature will be available only if the expected input is a \u003cstrong\u003e non empty array of item objects \u003c/strong\u003e",
-        "newRowButtonText": "Click to add a parameter"
+        "newRowButtonText": "Add parameter"
       }
     ],
     "enablingConditions": [
@@ -1169,7 +1218,6 @@ ___TEMPLATE_PARAMETERS___
 
 ___SANDBOXED_JS_FOR_SERVER___
 
-const log = require('logToConsole');
 const makeString = require('makeString');
 const makeNumber = require('makeNumber');
 const getType = require('getType');
@@ -1189,18 +1237,20 @@ const keyPrice = useGa4Array ? 'price' : data.keyPrice;
 const keyQuantity = useGa4Array ? 'quantity' : data.keyQuantity;
 const keyName = useGa4Array ? 'item_name' : data.keyName;
 const keyImg = data.keyImg;
-let keyCategory = data.keyCategory || [];
-const lastCategory = keyCategory ? JSON.parse(JSON.stringify(keyCategory)).reverse()[0] : []; //Force deep copy to avoid array destruction from reverse method
+let keyCategory = data.keyCategory && data.keyCategory.split(',');
+const lastCategory = getType(keyCategory) === 'array' && keyCategory[keyCategory.length - 1];
 const returnParameter = data[platform + 'ReturnParameter'];
 const jsonOutput = data.jsonOutput;
 const round = Math.round;
 const optionalData = data.addOptionalData ? makeTableMap(data.optionalData, 'optionalParamInputKey', 'optionalParamOutputKey') : undefined;
 const task = {};
+let returnValue;
 const categoryRegex = createRegex('item_category');
 const inputArray = useGa4Array ? getEventData('items') : data.inputArray;
 
 
 task.meta = {
+  content_name: getName,
   content_ids: getIdsArray,
   value: getTotalValue,
   num_items: getNumberOfItems,
@@ -1276,7 +1326,8 @@ task.klaviyo = {
 
 /* Main Logic */
 if (getType(inputArray) != 'array' || inputArray.length == 0) return;
-return jsonOutput ? JSON.stringify(task[platform][returnParameter](inputArray)) : task[platform][returnParameter](inputArray);
+returnValue = task[platform][returnParameter](inputArray);
+return jsonOutput ? JSON.stringify(returnValue) : returnValue;
 
 /* Helper Functions */
 
@@ -1321,18 +1372,10 @@ function getMetaContents(inputArray) {
 
 function getGa4CategoryKeys(item) {
   if (useGa4Array) {
-    var categoryKeys = Object.entries(item).filter((item) => testRegex(categoryRegex, item[0]));
+    const categoryKeys = Object.entries(item).filter((item) => testRegex(categoryRegex, item[0]));
     keyCategory = categoryKeys.map((category, index) => category[0]);
   }
   return keyCategory;
-}
-
-function getGa4CategoryValues(item) {
-  if (useGa4Array) {
-    var categoryKeys = Object.entries(item).filter((item) => testRegex(categoryRegex, item[0]));
-    var categoryValuesArray = categoryKeys.map((category, index) => category[1]);
-  }
-  return categoryValuesArray;
 }
 
 function setGA4Categories(targetItem, item) {
@@ -1344,11 +1387,11 @@ function setGA4Categories(targetItem, item) {
     return targetItem;
   }
 
-  if (!keyCategory || keyCategory.length == 0) return;
+  if (!keyCategory || keyCategory.length === 0) return;
 
-  if (keyCategory.length == 1 && getType(item[keyCategory[0]]) === 'array') {
+  if (keyCategory.length === 1 && getType(item[keyCategory[0]]) === 'array') {
     item[keyCategory[0]].forEach((category, index) => {
-      let pseudoIndex = index == 0 ? '' : index + 1;
+      const pseudoIndex = index === 0 ? '' : index + 1;
       targetItem['item_category' + pseudoIndex] = item[keyCategory[0]][index];
     });
     return targetItem;
@@ -1376,8 +1419,8 @@ function getGA4Items(inputArray) {
 }
 
 function getTikTokContents(inputArray) {
-  let formattedItems = inputArray.map((item) => {
-    let formattedItem = {
+  const formattedItems = inputArray.map((item) => {
+    const formattedItem = {
       content_id: item[keyId],
       price: item[keyPrice],
       content_name: item[keyName],
@@ -1441,22 +1484,25 @@ function getGoogleAdsItems(inputArray) {
     return {
       productId: item[keyId],
       unitPrice: item[keyPrice],
-      quantity: item[keyName]
+      quantity: item[keyCategory]
     };
   });
 }
 
 function getCriteoPrices(inputArray) {
+  if (inputArray.every(item => !item[keyPrice])) return;
   if (inputArray.length == 1) return inputArray[0][keyPrice];
   return inputArray.map((item) => makeString(item[keyPrice])).join('|');
 }
 
 function getCriteoIds(inputArray) {
+if (inputArray.every(item => !item[keyId])) return;
   if (inputArray.length == 1) return inputArray[0][keyId];
   return inputArray.map((item) => makeString(item[keyId])).join('|');
 }
 
 function getCriteoQuantities(inputArray) {
+  if (inputArray.every(item => !item[keyQuantity])) return;
   return inputArray.map((item) => makeString(item[keyQuantity])).join('|');
 }
 
@@ -1464,10 +1510,10 @@ function getCriteoCategories(inputArray) {
   if (useGa4Array) {
     keyCategory = getGa4CategoryKeys(inputArray[0]);
   }
-  if (keyCategory.length == 0) return;
+  if (keyCategory.length === 0) return;
 
-  if (keyCategory.length == 1 && getType(inputArray[0][lastCategory]) === 'array') return inputArray[0][lastCategory].join('>');
-  return keyCategory.length == 1 ? inputArray[0][lastCategory] : keyCategory.map((category) => inputArray[0][category]).join('>');
+  if (keyCategory.length === 1 && getType(inputArray[0][lastCategory]) === 'array') return inputArray[0][lastCategory].join('>');
+  return keyCategory.length === 1 ? inputArray[0][lastCategory] : keyCategory.map((category) => inputArray[0][category]).join('>');
 }
 
 function getRakutenCategories(item) {
@@ -1475,16 +1521,16 @@ function getRakutenCategories(item) {
     keyCategory = getGa4CategoryKeys(item);
   }
 
-  if (keyCategory.length == 0) return;
+  if (keyCategory.length === 0) return;
 
-  if (keyCategory.length == 1 && getType(item[lastCategory]) === 'array') return item[lastCategory].join('>');
+  if (keyCategory.length === 1 && getType(item[lastCategory]) === 'array') return item[lastCategory].join('>');
 
-  return keyCategory.length == 1 ? item[lastCategory] : keyCategory.map((category) => item[category]).join('>');
+  return keyCategory.length === 1 ? item[lastCategory] : keyCategory.map((category) => item[category]).join('>');
 }
 
 function getRakutenLineitems(inputArray) {
-  let formattedItems = inputArray.map((item) => {
-    let formattedItem = {
+  const formattedItems = inputArray.map((item) => {
+    const formattedItem = {
       sku: item[keyId],
       quantity: item[keyQuantity],
       amount: item[keyPrice],
@@ -1502,25 +1548,26 @@ function getRakutenLineitems(inputArray) {
 
 function getKlaviyoItems(inputArray) {
   inputArray = data.klaviyoReturnParameter === 'item' ? [inputArray[0]] : inputArray;
-  let formattedItems = inputArray.map((item) => {
-    let formattedItem = {
+  const formattedItems = inputArray.map((item) => {
+    const formattedItem = {
       ProductID: item[keyId],
       ProductName: item[keyName],
       Quantity: item[keyQuantity],
       ItemPrice: item[keyPrice],
+      Brand:item[keyBrand],
       ImageURL: item[keyImg]
     };
     if (useGa4Array) {
       keyCategory = getGa4CategoryKeys(item);
     } 
 
-    if (keyCategory.length == 0) keyCategory = keyCategory;
+    if (keyCategory.length === 0) keyCategory = keyCategory;
 
-    if (keyCategory.length == 1 && getType(item[keyCategory[0]]) === 'array') {
+    if (keyCategory.length === 1 && getType(item[keyCategory[0]]) === 'array') {
       formattedItem.Categories = item[keyCategory[0]];
     }
 
-    if (keyCategory.length == 1 && getType(item[keyCategory[0]]) !== 'array') {
+    if (keyCategory.length === 1 && getType(item[keyCategory[0]]) !== 'array') {
       formattedItem.Categories = keyCategory.map((category) => item[category]);
     }
 
@@ -1530,35 +1577,14 @@ function getKlaviyoItems(inputArray) {
     if(optionalData) setAdditionalParameters(formattedItem, item, optionalData); 
     return formattedItem;
   });
-    if(inputArray.length == 1) return data.encloseInArray ? [formattedItems[0]] : formattedItems[0];
-    return data.encloseInArray ? [formattedItems] : formattedItems;
+    if (data.klaviyoReturnParameter === 'item') return data.encloseInArray ? [formattedItems[0]] : formattedItems[0];
+    else return formattedItems;
 }
 
 
 ___SERVER_PERMISSIONS___
 
 [
-  {
-    "instance": {
-      "key": {
-        "publicId": "logging",
-        "versionId": "1"
-      },
-      "param": [
-        {
-          "key": "environments",
-          "value": {
-            "type": 1,
-            "string": "debug"
-          }
-        }
-      ]
-    },
-    "clientAnnotations": {
-      "isEditedByUser": true
-    },
-    "isRequired": true
-  },
   {
     "instance": {
       "key": {
@@ -1598,277 +1624,7 @@ ___SERVER_PERMISSIONS___
 ___TESTS___
 
 scenarios: []
-setup: |-
-  data.inputArray = [
-      {
-          "id": 1,
-          "title": "Essence Mascara Lash Princess",
-          "description": "The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula.",
-          "category": "beauty",
-          "price": 9.99,
-          "discountPercentage": 10.48,
-          "rating": 2.56,
-          "stock": 99,
-          "tags": [
-              "beauty",
-              "mascara"
-          ],
-          "brand": "Essence",
-          "sku": "BEA-ESS-ESS-001",
-          "weight": 4,
-          "dimensions": {
-              "width": 15.14,
-              "height": 13.08,
-              "depth": 22.99
-          },
-          "warrantyInformation": "1 week warranty",
-          "shippingInformation": "Ships in 3-5 business days",
-          "availabilityStatus": "In Stock",
-          "reviews": [
-              {
-                  "rating": 3,
-                  "comment": "Would not recommend!",
-                  "date": "2025-04-30T09:41:02.053Z",
-                  "reviewerName": "Eleanor Collins",
-                  "reviewerEmail": "eleanor.collins@x.dummyjson.com"
-              },
-              {
-                  "rating": 4,
-                  "comment": "Very satisfied!",
-                  "date": "2025-04-30T09:41:02.053Z",
-                  "reviewerName": "Lucas Gordon",
-                  "reviewerEmail": "lucas.gordon@x.dummyjson.com"
-              },
-              {
-                  "rating": 5,
-                  "comment": "Highly impressed!",
-                  "date": "2025-04-30T09:41:02.053Z",
-                  "reviewerName": "Eleanor Collins",
-                  "reviewerEmail": "eleanor.collins@x.dummyjson.com"
-              }
-          ],
-          "returnPolicy": "No return policy",
-          "minimumOrderQuantity": 48,
-          "meta": {
-              "createdAt": "2025-04-30T09:41:02.053Z",
-              "updatedAt": "2025-04-30T09:41:02.053Z",
-              "barcode": "5784719087687",
-              "qrCode": "https://cdn.dummyjson.com/public/qr-code.png"
-          },
-          "images": [
-              "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp"
-          ],
-          "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp",
-          "quantity": 10,
-          "categoryTree": [
-              "cat1",
-              "cat2",
-              "cat3"
-          ],
-          "categoryTreeString": "cat1|cat2|cat3"
-      },
-      {
-          "id": 2,
-          "title": "Eyeshadow Palette with Mirror",
-          "description": "The Eyeshadow Palette with Mirror offers a versatile range of eyeshadow shades for creating stunning eye looks. With a built-in mirror, it's convenient for on-the-go makeup application.",
-          "category": "beauty",
-          "price": 19.99,
-          "discountPercentage": 18.19,
-          "rating": 2.86,
-          "stock": 34,
-          "tags": [
-              "beauty",
-              "eyeshadow"
-          ],
-          "brand": "Glamour Beauty",
-          "sku": "BEA-GLA-EYE-002",
-          "weight": 9,
-          "dimensions": {
-              "width": 9.26,
-              "height": 22.47,
-              "depth": 27.67
-          },
-          "warrantyInformation": "1 year warranty",
-          "shippingInformation": "Ships in 2 weeks",
-          "availabilityStatus": "In Stock",
-          "reviews": [
-              {
-                  "rating": 5,
-                  "comment": "Great product!",
-                  "date": "2025-04-30T09:41:02.053Z",
-                  "reviewerName": "Savannah Gomez",
-                  "reviewerEmail": "savannah.gomez@x.dummyjson.com"
-              },
-              {
-                  "rating": 4,
-                  "comment": "Awesome product!",
-                  "date": "2025-04-30T09:41:02.053Z",
-                  "reviewerName": "Christian Perez",
-                  "reviewerEmail": "christian.perez@x.dummyjson.com"
-              },
-              {
-                  "rating": 1,
-                  "comment": "Poor quality!",
-                  "date": "2025-04-30T09:41:02.053Z",
-                  "reviewerName": "Nicholas Bailey",
-                  "reviewerEmail": "nicholas.bailey@x.dummyjson.com"
-              }
-          ],
-          "returnPolicy": "7 days return policy",
-          "minimumOrderQuantity": 20,
-          "meta": {
-              "createdAt": "2025-04-30T09:41:02.053Z",
-              "updatedAt": "2025-04-30T09:41:02.053Z",
-              "barcode": "9170275171413",
-              "qrCode": "https://cdn.dummyjson.com/public/qr-code.png"
-          },
-          "images": [
-              "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/1.webp"
-          ],
-          "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/thumbnail.webp",
-          "quantity": 5,
-          "categoryTree": [
-              "cat1",
-              "cat2",
-              "cat3"
-          ],
-          "categoryTreeString": "cat1|cat2|cat3"
-      },
-      {
-          "id": 3,
-          "title": "Powder Canister",
-          "description": "The Powder Canister is a finely milled setting powder designed to set makeup and control shine. With a lightweight and translucent formula, it provides a smooth and matte finish.",
-          "category": "beauty",
-          "price": 14.99,
-          "discountPercentage": 9.84,
-          "rating": 4.64,
-          "stock": 89,
-          "tags": [
-              "beauty",
-              "face powder"
-          ],
-          "brand": "Velvet Touch",
-          "sku": "BEA-VEL-POW-003",
-          "weight": 8,
-          "dimensions": {
-              "width": 29.27,
-              "height": 27.93,
-              "depth": 20.59
-          },
-          "warrantyInformation": "3 months warranty",
-          "shippingInformation": "Ships in 1-2 business days",
-          "availabilityStatus": "In Stock",
-          "reviews": [
-              {
-                  "rating": 4,
-                  "comment": "Would buy again!",
-                  "date": "2025-04-30T09:41:02.053Z",
-                  "reviewerName": "Alexander Jones",
-                  "reviewerEmail": "alexander.jones@x.dummyjson.com"
-              },
-              {
-                  "rating": 5,
-                  "comment": "Highly impressed!",
-                  "date": "2025-04-30T09:41:02.053Z",
-                  "reviewerName": "Elijah Cruz",
-                  "reviewerEmail": "elijah.cruz@x.dummyjson.com"
-              },
-              {
-                  "rating": 1,
-                  "comment": "Very dissatisfied!",
-                  "date": "2025-04-30T09:41:02.053Z",
-                  "reviewerName": "Avery Perez",
-                  "reviewerEmail": "avery.perez@x.dummyjson.com"
-              }
-          ],
-          "returnPolicy": "No return policy",
-          "minimumOrderQuantity": 22,
-          "meta": {
-              "createdAt": "2025-04-30T09:41:02.053Z",
-              "updatedAt": "2025-04-30T09:41:02.053Z",
-              "barcode": "8418883906837",
-              "qrCode": "https://cdn.dummyjson.com/public/qr-code.png"
-          },
-          "images": [
-              "https://cdn.dummyjson.com/product-images/beauty/powder-canister/1.webp"
-          ],
-          "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/powder-canister/thumbnail.webp",
-          "quantity": 4,
-          "categoryTree": [
-              "cat1",
-              "cat2",
-              "cat3"
-          ],
-          "categoryTreeString": "cat1|cat2|cat3"
-      },
-      {
-          "id": 4,
-          "title": "Red Lipstick",
-          "description": "The Red Lipstick is a classic and bold choice for adding a pop of color to your lips. With a creamy and pigmented formula, it provides a vibrant and long-lasting finish.",
-          "category": "beauty",
-          "price": 12.99,
-          "discountPercentage": 12.16,
-          "rating": 4.36,
-          "stock": 91,
-          "tags": [
-              "beauty",
-              "lipstick"
-          ],
-          "brand": "Chic Cosmetics",
-          "sku": "BEA-CHI-LIP-004",
-          "weight": 1,
-          "dimensions": {
-              "width": 18.11,
-              "height": 28.38,
-              "depth": 22.17
-          },
-          "warrantyInformation": "3 year warranty",
-          "shippingInformation": "Ships in 1 week",
-          "availabilityStatus": "In Stock",
-          "reviews": [
-              {
-                  "rating": 4,
-                  "comment": "Great product!",
-                  "date": "2025-04-30T09:41:02.053Z",
-                  "reviewerName": "Liam Garcia",
-                  "reviewerEmail": "liam.garcia@x.dummyjson.com"
-              },
-              {
-                  "rating": 5,
-                  "comment": "Great product!",
-                  "date": "2025-04-30T09:41:02.053Z",
-                  "reviewerName": "Ruby Andrews",
-                  "reviewerEmail": "ruby.andrews@x.dummyjson.com"
-              },
-              {
-                  "rating": 5,
-                  "comment": "Would buy again!",
-                  "date": "2025-04-30T09:41:02.053Z",
-                  "reviewerName": "Clara Berry",
-                  "reviewerEmail": "clara.berry@x.dummyjson.com"
-              }
-          ],
-          "returnPolicy": "7 days return policy",
-          "minimumOrderQuantity": 40,
-          "meta": {
-              "createdAt": "2025-04-30T09:41:02.053Z",
-              "updatedAt": "2025-04-30T09:41:02.053Z",
-              "barcode": "9467746727219",
-              "qrCode": "https://cdn.dummyjson.com/public/qr-code.png"
-          },
-          "images": [
-              "https://cdn.dummyjson.com/product-images/beauty/red-lipstick/1.webp"
-          ],
-          "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/red-lipstick/thumbnail.webp",
-          "quantity": 9,
-          "categoryTree": [
-              "cat1",
-              "cat2",
-              "cat3"
-          ],
-          "categoryTreeString": "cat1|cat2|cat3"
-      }
-  ];
+setup: ''
 
 
 ___NOTES___
