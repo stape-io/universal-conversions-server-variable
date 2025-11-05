@@ -11,14 +11,15 @@ const testRegex = require('testRegex');
 
 const platform = data.platform;
 const useGa4Array = data.getGa4Items;
+const inputArray = useGa4Array ? getEventData('items') : data.inputArray;
 const keyId = useGa4Array ? 'item_id' : data.keyId;
 const keyBrand = useGa4Array ? 'item_brand' : data.keyBrand;
 const keyPrice = useGa4Array ? 'price' : data.keyPrice;
 const keyQuantity = useGa4Array ? 'quantity' : data.keyQuantity;
 const keyName = useGa4Array ? 'item_name' : data.keyName;
 const keyImg = data.keyImg;
-let keyCategory = data.keyCategory && data.keyCategory.split(',');
-const lastCategory = getType(keyCategory) === 'array' && keyCategory[keyCategory.length - 1];
+let keyCategory = data.keyCategory && data.keyCategory.split(',').map((category) => category.trim());
+let lastCategory = getType(keyCategory) === 'array' && keyCategory[keyCategory.length - 1];
 const returnParameter = data[platform + 'ReturnParameter'];
 const jsonOutput = data.jsonOutput;
 const round = Math.round;
@@ -26,7 +27,14 @@ const optionalData = data.addOptionalData ? makeTableMap(data.optionalData, 'opt
 const task = {};
 let returnValue;
 const categoryRegex = createRegex('item_category');
-const inputArray = useGa4Array ? getEventData('items') : data.inputArray;
+
+/*
+=======================================================================
+                         MAIN EXECUTION
+========================================================================
+*/
+
+if (getType(inputArray) != 'array' || inputArray.length == 0) return;
 
 task.meta = {
   content_name: getName,
@@ -86,13 +94,6 @@ task.googleAdsOffline = {
   value: getTotalValue
 };
 
-task.criteo = {
-  item: getCriteoIds,
-  price: getCriteoPrices,
-  quantity: getCriteoQuantities,
-  category: getCriteoCategories
-};
-
 task.rakuten = {
   items: getRakutenLineitems
 };
@@ -103,12 +104,14 @@ task.klaviyo = {
   value: getTotalValue
 };
 
-/* Main Logic */
-if (getType(inputArray) != 'array' || inputArray.length == 0) return;
 returnValue = task[platform][returnParameter](inputArray);
 return jsonOutput ? JSON.stringify(returnValue) : returnValue;
 
-/* Helper Functions */
+/*
+=======================================================================
+                               HELPERS 
+========================================================================
+*/
 
 function toFixed2(input) {
   return round(makeNumber(input) * 100) / 100;
@@ -138,6 +141,12 @@ function setAdditionalParameters(targetItem, item, optionalData) {
   return targetItem;
 }
 
+/*
+========================================================================
+                        VENDOR RELATED FUNCTIONS
+========================================================================
+*/
+
 function getMetaContents(inputArray) {
   const contents = inputArray.map((item) => {
     return {
@@ -152,12 +161,14 @@ function getMetaContents(inputArray) {
 function getGa4CategoryKeys(item) {
   if (useGa4Array) {
     const categoryKeys = Object.entries(item).filter((item) => testRegex(categoryRegex, item[0]));
-    keyCategory = categoryKeys.map((category, index) => category[0]);
+    keyCategory = categoryKeys.map((category) => category[0]);
   }
   return keyCategory;
 }
 
 function setGA4Categories(targetItem, item) {
+  if (!keyCategory || keyCategory.length === 0) return targetItem;
+
   if (useGa4Array) {
     keyCategory = getGa4CategoryKeys(item);
     keyCategory.forEach((category, index) => {
@@ -165,8 +176,6 @@ function setGA4Categories(targetItem, item) {
     });
     return targetItem;
   }
-
-  if (!keyCategory || keyCategory.length === 0) return;
 
   if (keyCategory.length === 1 && getType(item[keyCategory[0]]) === 'array') {
     item[keyCategory[0]].forEach((category, index) => {
@@ -184,6 +193,7 @@ function setGA4Categories(targetItem, item) {
 }
 
 function getGA4Items(inputArray) {
+  if (useGa4Array) return inputArray;
   return inputArray.map((item) => {
     let ga4Item = {
       item_id: item[keyId],
@@ -199,12 +209,20 @@ function getGA4Items(inputArray) {
 
 function getTikTokContents(inputArray) {
   const formattedItems = inputArray.map((item) => {
+    if (useGa4Array) {
+      keyCategory = getGa4CategoryKeys(item);
+      lastCategory = keyCategory[keyCategory.length - 1];
+    }
+    if (getType(item[lastCategory]) === 'array') {
+      lastCategory = item[lastCategory];
+      lastCategory = lastCategory[lastCategory.length - 1];
+    }
     const formattedItem = {
       content_id: item[keyId],
       price: item[keyPrice],
       content_name: item[keyName],
       brand: item[keyBrand],
-      content_category: item[lastCategory]
+      content_category: item[lastCategory] || lastCategory
     };
     if (optionalData) setAdditionalParameters(formattedItem, item, optionalData);
     return formattedItem;
@@ -214,11 +232,19 @@ function getTikTokContents(inputArray) {
 
 function getTwitterContents(inputArray) {
   return inputArray.map((item) => {
+    if (useGa4Array) {
+      keyCategory = getGa4CategoryKeys(item);
+      lastCategory = keyCategory[keyCategory.length - 1];
+    }
+    if (getType(item[lastCategory]) === 'array') {
+      lastCategory = item[lastCategory];
+      lastCategory = lastCategory[lastCategory.length - 1];
+    }
     return {
       content_id: item[keyId],
       content_price: item[keyPrice],
       content_name: item[keyName],
-      content_type: item[lastCategory]
+      content_type: item[lastCategory] || lastCategory
     };
   });
 }
@@ -236,12 +262,20 @@ function getMicrosoftItems(inputArray) {
 
 function getPinterestContents(inputArray) {
   return inputArray.map((item) => {
+    if (useGa4Array) {
+      keyCategory = getGa4CategoryKeys(item);
+      lastCategory = keyCategory[keyCategory.length - 1];
+    }
+    if (getType(item[lastCategory]) === 'array') {
+      lastCategory = item[lastCategory];
+      lastCategory = lastCategory[lastCategory.length - 1];
+    }
     return {
       id: item[keyId],
       item_price: item[keyPrice],
       item_name: item[keyName],
       quantity: item[keyQuantity],
-      item_category: item[lastCategory],
+      item_category: item[lastCategory] || lastCategory,
       item_brand: item[keyBrand]
     };
   });
@@ -249,11 +283,19 @@ function getPinterestContents(inputArray) {
 
 function getRedditProducts(inputArray) {
   return inputArray.map((item) => {
+    if (useGa4Array) {
+      keyCategory = getGa4CategoryKeys(item);
+      lastCategory = keyCategory[keyCategory.length - 1];
+    }
+    if (getType(item[lastCategory]) === 'array') {
+      lastCategory = item[lastCategory];
+      lastCategory = lastCategory[lastCategory.length - 1];
+    }
     return {
       id: item[keyId],
       price: item[keyPrice],
       name: item[keyName],
-      category: item[lastCategory]
+      category: item[lastCategory] || lastCategory
     };
   });
 }
@@ -263,36 +305,9 @@ function getGoogleAdsItems(inputArray) {
     return {
       productId: item[keyId],
       unitPrice: item[keyPrice],
-      quantity: item[keyCategory]
+      quantity: item[keyQuantity]
     };
   });
-}
-
-function getCriteoPrices(inputArray) {
-  if (inputArray.every((item) => !item[keyPrice])) return;
-  if (inputArray.length == 1) return inputArray[0][keyPrice];
-  return inputArray.map((item) => makeString(item[keyPrice])).join('|');
-}
-
-function getCriteoIds(inputArray) {
-  if (inputArray.every((item) => !item[keyId])) return;
-  if (inputArray.length == 1) return inputArray[0][keyId];
-  return inputArray.map((item) => makeString(item[keyId])).join('|');
-}
-
-function getCriteoQuantities(inputArray) {
-  if (inputArray.every((item) => !item[keyQuantity])) return;
-  return inputArray.map((item) => makeString(item[keyQuantity])).join('|');
-}
-
-function getCriteoCategories(inputArray) {
-  if (useGa4Array) {
-    keyCategory = getGa4CategoryKeys(inputArray[0]);
-  }
-  if (keyCategory.length === 0) return;
-
-  if (keyCategory.length === 1 && getType(inputArray[0][lastCategory]) === 'array') return inputArray[0][lastCategory].join('>');
-  return keyCategory.length === 1 ? inputArray[0][lastCategory] : keyCategory.map((category) => inputArray[0][category]).join('>');
 }
 
 function getRakutenCategories(item) {
@@ -317,7 +332,7 @@ function getRakutenLineitems(inputArray) {
     };
     if (useGa4Array || data.buildRakutenCategoryTree) {
       formattedItem.optional_data = formattedItem.optional_data || {};
-      formattedItem.optional_data.cat = getRakutenCategories(item);
+      formattedItem.optional_data.category = getRakutenCategories(item);
     }
     if (optionalData) setAdditionalParameters(formattedItem.optional_data, item, optionalData);
     return formattedItem;

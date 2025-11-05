@@ -19,7 +19,6 @@ Universal Conversions Variable for Server Side Google Tag Manager allows you to 
 - Google Ads Offline
 - Pinterest
 - Rakuten
-- Criteo
 - Reddit
 
 ## Open Source

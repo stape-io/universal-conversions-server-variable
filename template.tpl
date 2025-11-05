@@ -76,10 +76,6 @@ ___TEMPLATE_PARAMETERS___
             "displayValue": "Rakuten"
           },
           {
-            "value": "criteo",
-            "displayValue": "Criteo"
-          },
-          {
             "value": "reddit",
             "displayValue": "Reddit"
           }
@@ -390,41 +386,6 @@ ___TEMPLATE_PARAMETERS___
           {
             "paramName": "platform",
             "paramValue": "reddit",
-            "type": "EQUALS"
-          }
-        ]
-      },
-      {
-        "type": "RADIO",
-        "name": "criteoReturnParameter",
-        "displayName": "",
-        "radioItems": [
-          {
-            "value": "item",
-            "displayValue": "item",
-            "help": "Returns a list of product IDs as described in \u003ca href\u003d\"https://developers.criteo.com/retailer-integration/docs/order-confirmation-page\"\u003e official documentation\u003c/a\u003e as of October 2025."
-          },
-          {
-            "value": "price",
-            "displayValue": "price",
-            "help": "Returns a string of item prices, as described in \u003ca href\u003d\"https://developers.criteo.com/retailer-integration/docs/order-confirmation-page\"\u003e official documentation\u003c/a\u003e as of October 2025."
-          },
-          {
-            "value": "quantity",
-            "displayValue": "quantity",
-            "help": "Returns a string representing the quantities of each item separated by pipe. \u003cbr\u003e\nFor more information see description in \u003ca href\u003d\"https://developers.criteo.com/retailer-integration/docs/order-confirmation-page\"\u003e official documentation\u003c/a\u003e as of October 2025."
-          },
-          {
-            "value": "category",
-            "displayValue": "category",
-            "help": "Builds the category breadcrumbs for PDP event, as described in \u003ca href\u003d\"https://developers.criteo.com/retailer-integration/docs/product-details-page\"\u003e official documentation\u003c/a\u003e as of October 2025."
-          }
-        ],
-        "simpleValueType": true,
-        "enablingConditions": [
-          {
-            "paramName": "platform",
-            "paramValue": "criteo",
             "type": "EQUALS"
           }
         ]
@@ -820,7 +781,7 @@ ___TEMPLATE_PARAMETERS___
             "type": "EQUALS"
           },
           {
-            "paramName": "ga4ReturnParameterm",
+            "paramName": "ga4ReturnParameter",
             "paramValue": "items",
             "type": "EQUALS"
           },
@@ -1177,23 +1138,28 @@ ___TEMPLATE_PARAMETERS___
     ],
     "enablingConditions": [
       {
-        "paramName": "platform",
-        "paramValue": "ga4",
+        "paramName": "ga4ReturnParameter",
+        "paramValue": "items",
         "type": "EQUALS"
       },
       {
-        "paramName": "platform",
-        "paramValue": "klaviyo",
+        "paramName": "klaviyoReturnParameter",
+        "paramValue": "items",
         "type": "EQUALS"
       },
       {
-        "paramName": "platform",
-        "paramValue": "tiktok",
+        "paramName": "klaviyoReturnParameter",
+        "paramValue": "item",
         "type": "EQUALS"
       },
       {
-        "paramName": "platform",
-        "paramValue": "rakuten",
+        "paramName": "tiktokReturnParameter",
+        "paramValue": "contents",
+        "type": "EQUALS"
+      },
+      {
+        "paramName": "rakutenReturnParameter",
+        "paramValue": "items",
         "type": "EQUALS"
       }
     ]
@@ -1231,14 +1197,15 @@ const testRegex = require('testRegex');
 
 const platform = data.platform;
 const useGa4Array = data.getGa4Items;
+const inputArray = useGa4Array ? getEventData('items') : data.inputArray;
 const keyId = useGa4Array ? 'item_id' : data.keyId;
 const keyBrand = useGa4Array ? 'item_brand' : data.keyBrand;
 const keyPrice = useGa4Array ? 'price' : data.keyPrice;
 const keyQuantity = useGa4Array ? 'quantity' : data.keyQuantity;
 const keyName = useGa4Array ? 'item_name' : data.keyName;
 const keyImg = data.keyImg;
-let keyCategory = data.keyCategory && data.keyCategory.split(',');
-const lastCategory = getType(keyCategory) === 'array' && keyCategory[keyCategory.length - 1];
+let keyCategory = data.keyCategory && data.keyCategory.split(',').map((category) => category.trim());
+let lastCategory = getType(keyCategory) === 'array' && keyCategory[keyCategory.length - 1];
 const returnParameter = data[platform + 'ReturnParameter'];
 const jsonOutput = data.jsonOutput;
 const round = Math.round;
@@ -1246,8 +1213,14 @@ const optionalData = data.addOptionalData ? makeTableMap(data.optionalData, 'opt
 const task = {};
 let returnValue;
 const categoryRegex = createRegex('item_category');
-const inputArray = useGa4Array ? getEventData('items') : data.inputArray;
 
+/*
+=======================================================================
+                         MAIN EXECUTION
+========================================================================
+*/
+
+if (getType(inputArray) != 'array' || inputArray.length == 0) return;
 
 task.meta = {
   content_name: getName,
@@ -1307,13 +1280,6 @@ task.googleAdsOffline = {
   value: getTotalValue
 };
 
-task.criteo = {
-  item: getCriteoIds,
-  price: getCriteoPrices,
-  quantity: getCriteoQuantities,
-  category: getCriteoCategories
-};
-
 task.rakuten = {
   items: getRakutenLineitems
 };
@@ -1324,12 +1290,14 @@ task.klaviyo = {
   value: getTotalValue
 };
 
-/* Main Logic */
-if (getType(inputArray) != 'array' || inputArray.length == 0) return;
 returnValue = task[platform][returnParameter](inputArray);
 return jsonOutput ? JSON.stringify(returnValue) : returnValue;
 
-/* Helper Functions */
+/*
+=======================================================================
+                               HELPERS 
+========================================================================
+*/
 
 function toFixed2(input) {
   return round(makeNumber(input) * 100) / 100;
@@ -1359,6 +1327,12 @@ function setAdditionalParameters(targetItem, item, optionalData) {
   return targetItem;
 }
 
+/*
+========================================================================
+                        VENDOR RELATED FUNCTIONS
+========================================================================
+*/
+
 function getMetaContents(inputArray) {
   const contents = inputArray.map((item) => {
     return {
@@ -1373,12 +1347,14 @@ function getMetaContents(inputArray) {
 function getGa4CategoryKeys(item) {
   if (useGa4Array) {
     const categoryKeys = Object.entries(item).filter((item) => testRegex(categoryRegex, item[0]));
-    keyCategory = categoryKeys.map((category, index) => category[0]);
+    keyCategory = categoryKeys.map((category) => category[0]);
   }
   return keyCategory;
 }
 
 function setGA4Categories(targetItem, item) {
+  if (!keyCategory || keyCategory.length === 0) return targetItem;
+
   if (useGa4Array) {
     keyCategory = getGa4CategoryKeys(item);
     keyCategory.forEach((category, index) => {
@@ -1386,8 +1362,6 @@ function setGA4Categories(targetItem, item) {
     });
     return targetItem;
   }
-
-  if (!keyCategory || keyCategory.length === 0) return;
 
   if (keyCategory.length === 1 && getType(item[keyCategory[0]]) === 'array') {
     item[keyCategory[0]].forEach((category, index) => {
@@ -1405,6 +1379,7 @@ function setGA4Categories(targetItem, item) {
 }
 
 function getGA4Items(inputArray) {
+  if (useGa4Array) return inputArray;
   return inputArray.map((item) => {
     let ga4Item = {
       item_id: item[keyId],
@@ -1420,12 +1395,20 @@ function getGA4Items(inputArray) {
 
 function getTikTokContents(inputArray) {
   const formattedItems = inputArray.map((item) => {
+    if (useGa4Array) {
+      keyCategory = getGa4CategoryKeys(item);
+      lastCategory = keyCategory[keyCategory.length - 1];
+    }
+    if (getType(item[lastCategory]) === 'array') {
+      lastCategory = item[lastCategory];
+      lastCategory = lastCategory[lastCategory.length - 1];
+    }
     const formattedItem = {
       content_id: item[keyId],
       price: item[keyPrice],
       content_name: item[keyName],
       brand: item[keyBrand],
-      content_category: item[lastCategory]
+      content_category: item[lastCategory] || lastCategory
     };
     if (optionalData) setAdditionalParameters(formattedItem, item, optionalData);
     return formattedItem;
@@ -1435,11 +1418,19 @@ function getTikTokContents(inputArray) {
 
 function getTwitterContents(inputArray) {
   return inputArray.map((item) => {
+    if (useGa4Array) {
+      keyCategory = getGa4CategoryKeys(item);
+      lastCategory = keyCategory[keyCategory.length - 1];
+    }
+    if (getType(item[lastCategory]) === 'array') {
+      lastCategory = item[lastCategory];
+      lastCategory = lastCategory[lastCategory.length - 1];
+    }
     return {
       content_id: item[keyId],
       content_price: item[keyPrice],
       content_name: item[keyName],
-      content_type: item[lastCategory]
+      content_type: item[lastCategory] || lastCategory
     };
   });
 }
@@ -1457,12 +1448,20 @@ function getMicrosoftItems(inputArray) {
 
 function getPinterestContents(inputArray) {
   return inputArray.map((item) => {
+    if (useGa4Array) {
+      keyCategory = getGa4CategoryKeys(item);
+      lastCategory = keyCategory[keyCategory.length - 1];
+    }
+    if (getType(item[lastCategory]) === 'array') {
+      lastCategory = item[lastCategory];
+      lastCategory = lastCategory[lastCategory.length - 1];
+    }
     return {
       id: item[keyId],
       item_price: item[keyPrice],
       item_name: item[keyName],
       quantity: item[keyQuantity],
-      item_category: item[lastCategory],
+      item_category: item[lastCategory] || lastCategory,
       item_brand: item[keyBrand]
     };
   });
@@ -1470,11 +1469,19 @@ function getPinterestContents(inputArray) {
 
 function getRedditProducts(inputArray) {
   return inputArray.map((item) => {
+    if (useGa4Array) {
+      keyCategory = getGa4CategoryKeys(item);
+      lastCategory = keyCategory[keyCategory.length - 1];
+    }
+    if (getType(item[lastCategory]) === 'array') {
+      lastCategory = item[lastCategory];
+      lastCategory = lastCategory[lastCategory.length - 1];
+    }
     return {
       id: item[keyId],
       price: item[keyPrice],
       name: item[keyName],
-      category: item[lastCategory]
+      category: item[lastCategory] || lastCategory
     };
   });
 }
@@ -1484,36 +1491,9 @@ function getGoogleAdsItems(inputArray) {
     return {
       productId: item[keyId],
       unitPrice: item[keyPrice],
-      quantity: item[keyCategory]
+      quantity: item[keyQuantity]
     };
   });
-}
-
-function getCriteoPrices(inputArray) {
-  if (inputArray.every(item => !item[keyPrice])) return;
-  if (inputArray.length == 1) return inputArray[0][keyPrice];
-  return inputArray.map((item) => makeString(item[keyPrice])).join('|');
-}
-
-function getCriteoIds(inputArray) {
-if (inputArray.every(item => !item[keyId])) return;
-  if (inputArray.length == 1) return inputArray[0][keyId];
-  return inputArray.map((item) => makeString(item[keyId])).join('|');
-}
-
-function getCriteoQuantities(inputArray) {
-  if (inputArray.every(item => !item[keyQuantity])) return;
-  return inputArray.map((item) => makeString(item[keyQuantity])).join('|');
-}
-
-function getCriteoCategories(inputArray) {
-  if (useGa4Array) {
-    keyCategory = getGa4CategoryKeys(inputArray[0]);
-  }
-  if (keyCategory.length === 0) return;
-
-  if (keyCategory.length === 1 && getType(inputArray[0][lastCategory]) === 'array') return inputArray[0][lastCategory].join('>');
-  return keyCategory.length === 1 ? inputArray[0][lastCategory] : keyCategory.map((category) => inputArray[0][category]).join('>');
 }
 
 function getRakutenCategories(item) {
@@ -1538,7 +1518,7 @@ function getRakutenLineitems(inputArray) {
     };
     if (useGa4Array || data.buildRakutenCategoryTree) {
       formattedItem.optional_data = formattedItem.optional_data || {};
-      formattedItem.optional_data.cat = getRakutenCategories(item);
+      formattedItem.optional_data.category = getRakutenCategories(item);
     }
     if (optionalData) setAdditionalParameters(formattedItem.optional_data, item, optionalData);
     return formattedItem;
@@ -1554,12 +1534,12 @@ function getKlaviyoItems(inputArray) {
       ProductName: item[keyName],
       Quantity: item[keyQuantity],
       ItemPrice: item[keyPrice],
-      Brand:item[keyBrand],
+      Brand: item[keyBrand],
       ImageURL: item[keyImg]
     };
     if (useGa4Array) {
       keyCategory = getGa4CategoryKeys(item);
-    } 
+    }
 
     if (keyCategory.length === 0) keyCategory = keyCategory;
 
@@ -1574,11 +1554,11 @@ function getKlaviyoItems(inputArray) {
     if (keyCategory.length > 1 && getType(item[keyCategory]) !== 'array') {
       formattedItem.Categories = keyCategory.map((category) => item[category]);
     }
-    if(optionalData) setAdditionalParameters(formattedItem, item, optionalData); 
+    if (optionalData) setAdditionalParameters(formattedItem, item, optionalData);
     return formattedItem;
   });
-    if (data.klaviyoReturnParameter === 'item') return data.encloseInArray ? [formattedItems[0]] : formattedItems[0];
-    else return formattedItems;
+  if (data.klaviyoReturnParameter === 'item') return data.encloseInArray ? [formattedItems[0]] : formattedItems[0];
+  else return formattedItems;
 }
 
 
