@@ -1,4 +1,5 @@
 homepage: 'https://stape.io/'
+documentation: 'https://github.com/stape-io/universal-conversions-variable-server/'
 versions:
-  - sha: 72dc56d4e856ded563408bb9ea5af4bc3017dfdb
+  - sha: b2727001f3947de8129e86ceba21ddfaffb0e0e6
     changeNotes: Initial release.
