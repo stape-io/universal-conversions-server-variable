@@ -1,4 +1,3 @@
-const makeString = require('makeString');
 const makeNumber = require('makeNumber');
 const getType = require('getType');
 const Math = require('Math');
@@ -9,7 +8,11 @@ const getEventData = require('getEventData');
 const createRegex = require('createRegex');
 const testRegex = require('testRegex');
 
-const platform = data.platform;
+/*
+========================================================================
+========================================================================
+*/
+
 const useGa4Array = data.getGa4Items;
 const inputArray = useGa4Array ? getEventData('items') : data.inputArray;
 const keyId = useGa4Array ? 'item_id' : data.keyId;
@@ -18,103 +21,92 @@ const keyPrice = useGa4Array ? 'price' : data.keyPrice;
 const keyQuantity = useGa4Array ? 'quantity' : data.keyQuantity;
 const keyName = useGa4Array ? 'item_name' : data.keyName;
 const keyImg = data.keyImg;
-let keyCategory = data.keyCategory && data.keyCategory.split(',').map((category) => category.trim());
-let lastCategory = getType(keyCategory) === 'array' && keyCategory[keyCategory.length - 1];
-const returnParameter = data[platform + 'ReturnParameter'];
-const jsonOutput = data.jsonOutput;
-const round = Math.round;
+let keyCategory = getType(data.keyCategory) === 'string' ? data.keyCategory.split(',').map((category) => category.trim()) : data.keyCategory;
+let lastCategory = getType(keyCategory) === 'array' && keyCategory.length ? keyCategory[keyCategory.length - 1] : undefined;
 const optionalData = data.addOptionalData ? makeTableMap(data.optionalData, 'optionalParamInputKey', 'optionalParamOutputKey') : undefined;
-const task = {};
-let returnValue;
 const categoryRegex = createRegex('item_category');
 
 /*
-=======================================================================
+========================================================================
                          MAIN EXECUTION
 ========================================================================
 */
 
-if (getType(inputArray) != 'array' || inputArray.length == 0) return;
+if (getType(inputArray) !== 'array' || inputArray.length === 0) return;
 
-task.meta = {
-  content_name: getName,
-  content_ids: getIdsArray,
-  value: getTotalValue,
-  num_items: getNumberOfItems,
-  contents: getMetaContents
+const task = {
+  meta: {
+    content_name: getName,
+    content_ids: getIdsArray,
+    value: getTotalValue,
+    num_items: getNumberOfItems,
+    contents: getMetaContents
+  },
+  ga4: {
+    value: getTotalValue,
+    items: getGA4Items
+  },
+  tiktok: {
+    contents: getTikTokContents,
+    value: getTotalValue,
+    content_ids: getIdsArray,
+    num_items: getNumberOfItems
+  },
+  twitter: {
+    contents: getTwitterContents,
+    value: getTotalValue,
+    number_items: getNumberOfItems
+  },
+  microsoft: {
+    items: getMicrosoftItems,
+    value: getTotalValue,
+    item_ids: getIdsArray
+  },
+  pinterest: {
+    contents: getPinterestContents,
+    value: getTotalValue,
+    num_items: getNumberOfItems,
+    content_ids: getIdsArray
+  },
+  snapchat: {
+    contents: getMetaContents,
+    value: getTotalValue,
+    content_ids: getIdsArray,
+    num_items: getNumberOfItems,
+    content_name: getName
+  },
+  reddit: {
+    products: getRedditProducts,
+    value: getTotalValue,
+    item_count: getNumberOfItems
+  },
+  googleAdsOffline: {
+    items: getGoogleAdsItems,
+    value: getTotalValue
+  },
+  rakuten: {
+    items: getRakutenLineitems
+  },
+  klaviyo: {
+    items: getKlaviyoItems,
+    item: getKlaviyoItems,
+    value: getTotalValue
+  }
 };
 
-task.ga4 = {
-  value: getTotalValue,
-  items: getGA4Items
-};
-
-task.tiktok = {
-  contents: getTikTokContents,
-  value: getTotalValue,
-  content_ids: getIdsArray,
-  num_items: getNumberOfItems
-};
-
-task.twitter = {
-  contents: getTwitterContents,
-  value: getTotalValue,
-  number_items: getNumberOfItems
-};
-
-task.microsoft = {
-  items: getMicrosoftItems,
-  value: getTotalValue,
-  item_ids: getIdsArray
-};
-
-task.pinterest = {
-  contents: getPinterestContents,
-  value: getTotalValue,
-  num_items: getNumberOfItems,
-  content_ids: getIdsArray
-};
-
-task.snapchat = {
-  contents: getMetaContents,
-  value: getTotalValue,
-  content_ids: getIdsArray,
-  num_items: getNumberOfItems,
-  content_name: getName
-};
-
-task.reddit = {
-  products: getRedditProducts,
-  value: getTotalValue,
-  item_count: getNumberOfItems
-};
-
-task.googleAdsOffline = {
-  items: getGoogleAdsItems,
-  value: getTotalValue
-};
-
-task.rakuten = {
-  items: getRakutenLineitems
-};
-
-task.klaviyo = {
-  items: getKlaviyoItems,
-  item: getKlaviyoItems,
-  value: getTotalValue
-};
-
-returnValue = task[platform][returnParameter](inputArray);
-return jsonOutput ? JSON.stringify(returnValue) : returnValue;
+const platform = data.platform;
+const returnParameter = data[platform + 'ReturnParameter'];
+const returnValue = task[platform][returnParameter](inputArray);
+return data.jsonOutput ? JSON.stringify(returnValue) : returnValue;
 
 /*
-=======================================================================
-                               HELPERS 
+========================================================================
+                               HELPERS
 ========================================================================
 */
 
 function toFixed2(input) {
-  return round(makeNumber(input) * 100) / 100;
+  return Math.round(makeNumber(input) * 100) / 100;
 }
 
 function getTotalValue(inputArray) {
@@ -126,6 +118,7 @@ function getIdsArray(inputArray) {
 }
 
 function getName(inputArray) {
+  if (inputArray.length !== 1) return undefined;
   return inputArray[0][keyName];
 }
 
@@ -183,9 +176,9 @@ function setGA4Categories(targetItem, item) {
       targetItem['item_category' + pseudoIndex] = item[keyCategory[0]][index];
     });
     return targetItem;
-  } else {
+  } else if (keyCategory.length > 0) {
     keyCategory.forEach((category, index) => {
-      index = index == 0 ? '' : index + 1;
+      index = index === 0 ? '' : index + 1;
       targetItem['item_category' + index] = item[category];
     });
   }
@@ -199,7 +192,8 @@ function getGA4Items(inputArray) {
       item_id: item[keyId],
       item_price: item[keyPrice],
       item_quantity: item[keyQuantity],
-      item_name: item[keyName]
+      item_name: item[keyName],
+      item_brand: item[keyBrand]
     };
     ga4Item = setGA4Categories(ga4Item, item);
     if (optionalData) setAdditionalParameters(ga4Item, item, optionalData);
@@ -213,7 +207,7 @@ function getTikTokContents(inputArray) {
       keyCategory = getGa4CategoryKeys(item);
       lastCategory = keyCategory[keyCategory.length - 1];
     }
-    if (getType(item[lastCategory]) === 'array') {
+    if (lastCategory && getType(item[lastCategory]) === 'array') {
       lastCategory = item[lastCategory];
       lastCategory = lastCategory[lastCategory.length - 1];
     }
@@ -236,7 +230,7 @@ function getTwitterContents(inputArray) {
       keyCategory = getGa4CategoryKeys(item);
       lastCategory = keyCategory[keyCategory.length - 1];
     }
-    if (getType(item[lastCategory]) === 'array') {
+    if (lastCategory && getType(item[lastCategory]) === 'array') {
       lastCategory = item[lastCategory];
       lastCategory = lastCategory[lastCategory.length - 1];
     }
@@ -266,7 +260,7 @@ function getPinterestContents(inputArray) {
       keyCategory = getGa4CategoryKeys(item);
       lastCategory = keyCategory[keyCategory.length - 1];
     }
-    if (getType(item[lastCategory]) === 'array') {
+    if (lastCategory && getType(item[lastCategory]) === 'array') {
       lastCategory = item[lastCategory];
       lastCategory = lastCategory[lastCategory.length - 1];
     }
@@ -287,7 +281,7 @@ function getRedditProducts(inputArray) {
       keyCategory = getGa4CategoryKeys(item);
       lastCategory = keyCategory[keyCategory.length - 1];
     }
-    if (getType(item[lastCategory]) === 'array') {
+    if (lastCategory && getType(item[lastCategory]) === 'array') {
       lastCategory = item[lastCategory];
       lastCategory = lastCategory[lastCategory.length - 1];
     }
@@ -371,6 +365,9 @@ function getKlaviyoItems(inputArray) {
     if (optionalData) setAdditionalParameters(formattedItem, item, optionalData);
     return formattedItem;
   });
-  if (data.klaviyoReturnParameter === 'item') return data.encloseInArray ? [formattedItems[0]] : formattedItems[0];
-  else return formattedItems;
+
+  if (data.klaviyoReturnParameter === 'item') {
+    return data.encloseInArray ? formattedItems : formattedItems[0];
+  }
+  return formattedItems;
 }
