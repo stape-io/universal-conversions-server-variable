@@ -1,6 +1,25 @@
 # Universal Conversions Variable for Google Tag Manager Server Container
 
-Universal Conversions Variable for Google Tag Manager container can map your product array into formats required by platform destinations.
+Universal Conversions Variable for Server Side Google Tag Manager allows you to map multiple parameters into the formats required by platform destinations (Meta, TikTok, GA4, Reddit, etc.), such as:
+
+- product array
+- value
+- item count
+- etc.
+
+## It currenly supports the following platforms:
+
+- Meta Pixel/CAPI
+- Google Analytics 4
+- TikTok CAPI
+- Twitter CAPI
+- Microsoft Ads
+- Klaviyo
+- Snapchat
+- Google Ads Offline
+- Pinterest
+- Rakuten
+- Reddit
 
 ## Open Source
 
