@@ -1385,8 +1385,8 @@ function getGA4Items(inputArray) {
   return inputArray.map((item) => {
     let ga4Item = {
       item_id: item[keyId],
-      item_price: item[keyPrice],
-      item_quantity: item[keyQuantity],
+      price: item[keyPrice],
+      quantity: item[keyQuantity],
       item_name: item[keyName],
       item_brand: item[keyBrand]
     };
@@ -1543,8 +1543,6 @@ function getKlaviyoItems(inputArray) {
     if (useGa4Array) {
       keyCategory = getGa4CategoryKeys(item);
     }
-
-    if (keyCategory.length === 0) keyCategory = keyCategory;
 
     if (keyCategory.length === 1 && getType(item[keyCategory[0]]) === 'array') {
       formattedItem.Categories = item[keyCategory[0]];
