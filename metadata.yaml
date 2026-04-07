@@ -1,5 +1,5 @@
 homepage: 'https://stape.io/'
-documentation: 'https://github.com/stape-io/universal-conversions-variable-server/'
+documentation: 'https://github.com/stape-io/universal-conversions-server-variable'
 versions:
   - sha: 11d7d4f1a52ad9ce327178cfa6b7709ab0e4b6d6
     changeNotes: Fixed GA4 items array field name typos and performed minor cleanup.
