@@ -1,11 +1,12 @@
-const makeNumber = require('makeNumber');
-const getType = require('getType');
-const Math = require('Math');
-const makeTableMap = require('makeTableMap');
-const Object = require('Object');
-const JSON = require('JSON');
-const getEventData = require('getEventData');
 const createRegex = require('createRegex');
+const getEventData = require('getEventData');
+const getType = require('getType');
+const JSON = require('JSON');
+const makeNumber = require('makeNumber');
+const makeString = require('makeString');
+const makeTableMap = require('makeTableMap');
+const Math = require('Math');
+const Object = require('Object');
 const testRegex = require('testRegex');
 
 /*
@@ -286,8 +287,9 @@ function getRedditProducts(inputArray) {
       lastCategory = lastCategory[lastCategory.length - 1];
     }
     return {
-      id: item[keyId],
-      price: item[keyPrice],
+      id: makeString(item[keyId]),
+      item_price: item[keyPrice],
+      quantity: item[keyQuantity],
       name: item[keyName],
       category: item[lastCategory] || lastCategory
     };
