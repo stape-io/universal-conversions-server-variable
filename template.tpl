@@ -1222,9 +1222,17 @@ const keyPrice = useGa4Array ? 'price' : data.keyPrice;
 const keyQuantity = useGa4Array ? 'quantity' : data.keyQuantity;
 const keyName = useGa4Array ? 'item_name' : data.keyName;
 const keyImg = data.keyImg;
-let keyCategory = getType(data.keyCategory) === 'string' ? data.keyCategory.split(',').map((category) => category.trim()) : data.keyCategory;
-let lastCategory = getType(keyCategory) === 'array' && keyCategory.length ? keyCategory[keyCategory.length - 1] : undefined;
-const optionalData = data.addOptionalData ? makeTableMap(data.optionalData, 'optionalParamInputKey', 'optionalParamOutputKey') : undefined;
+let keyCategory =
+  getType(data.keyCategory) === 'string'
+    ? data.keyCategory.split(',').map((category) => category.trim())
+    : data.keyCategory;
+let lastCategory =
+  getType(keyCategory) === 'array' && keyCategory.length
+    ? keyCategory[keyCategory.length - 1]
+    : undefined;
+const optionalData = data.addOptionalData
+  ? makeTableMap(data.optionalData, 'optionalParamInputKey', 'optionalParamOutputKey')
+  : undefined;
 const categoryRegex = createRegex('item_category');
 
 /*
@@ -1311,7 +1319,12 @@ function toFixed2(input) {
 }
 
 function getTotalValue(inputArray) {
-  return toFixed2(inputArray.reduce((acc, curr) => acc + makeNumber(curr[keyPrice]) * makeNumber(curr[keyQuantity]), 0));
+  return toFixed2(
+    inputArray.reduce(
+      (acc, curr) => acc + makeNumber(curr[keyPrice]) * makeNumber(curr[keyQuantity]),
+      0
+    )
+  );
 }
 
 function getIdsArray(inputArray) {
@@ -1513,9 +1526,12 @@ function getRakutenCategories(item) {
 
   if (keyCategory.length === 0) return;
 
-  if (keyCategory.length === 1 && getType(item[lastCategory]) === 'array') return item[lastCategory].join('>');
+  if (keyCategory.length === 1 && getType(item[lastCategory]) === 'array')
+    return item[lastCategory].join('>');
 
-  return keyCategory.length === 1 ? item[lastCategory] : keyCategory.map((category) => item[category]).join('>');
+  return keyCategory.length === 1
+    ? item[lastCategory]
+    : keyCategory.map((category) => item[category]).join('>');
 }
 
 function getRakutenLineitems(inputArray) {
@@ -1571,6 +1587,7 @@ function getKlaviyoItems(inputArray) {
   }
   return formattedItems;
 }
+
 
 
 ___SERVER_PERMISSIONS___
