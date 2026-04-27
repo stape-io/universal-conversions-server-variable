@@ -1,7 +1,7 @@
 homepage: 'https://stape.io/'
 documentation: 'https://github.com/stape-io/universal-conversions-server-variable'
 versions:
-  - sha: 1f0c3683b7101f291bf0aefb49c855952f189d6d
+  - sha: 2e9369301898f5e8f973caef64a4f1df22007d88
     changeNotes: Fix Reddit parameter bug.
   - sha: 11d7d4f1a52ad9ce327178cfa6b7709ab0e4b6d6
     changeNotes: Fixed GA4 items array field name typos and performed minor cleanup.
