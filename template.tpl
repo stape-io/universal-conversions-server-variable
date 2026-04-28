@@ -903,6 +903,11 @@ ___TEMPLATE_PARAMETERS___
             "paramName": "klaviyoReturnParameter",
             "paramValue": "value",
             "type": "EQUALS"
+          },
+          {
+            "paramName": "redditReturnParameter",
+            "paramValue": "products",
+            "type": "EQUALS"
           }
         ],
         "valueValidators": [
@@ -1193,14 +1198,15 @@ ___TEMPLATE_PARAMETERS___
 
 ___SANDBOXED_JS_FOR_SERVER___
 
-const makeNumber = require('makeNumber');
-const getType = require('getType');
-const Math = require('Math');
-const makeTableMap = require('makeTableMap');
-const Object = require('Object');
-const JSON = require('JSON');
-const getEventData = require('getEventData');
 const createRegex = require('createRegex');
+const getEventData = require('getEventData');
+const getType = require('getType');
+const JSON = require('JSON');
+const makeNumber = require('makeNumber');
+const makeString = require('makeString');
+const makeTableMap = require('makeTableMap');
+const Math = require('Math');
+const Object = require('Object');
 const testRegex = require('testRegex');
 
 /*
@@ -1216,9 +1222,17 @@ const keyPrice = useGa4Array ? 'price' : data.keyPrice;
 const keyQuantity = useGa4Array ? 'quantity' : data.keyQuantity;
 const keyName = useGa4Array ? 'item_name' : data.keyName;
 const keyImg = data.keyImg;
-let keyCategory = getType(data.keyCategory) === 'string' ? data.keyCategory.split(',').map((category) => category.trim()) : data.keyCategory;
-let lastCategory = getType(keyCategory) === 'array' && keyCategory.length ? keyCategory[keyCategory.length - 1] : undefined;
-const optionalData = data.addOptionalData ? makeTableMap(data.optionalData, 'optionalParamInputKey', 'optionalParamOutputKey') : undefined;
+let keyCategory =
+  getType(data.keyCategory) === 'string'
+    ? data.keyCategory.split(',').map((category) => category.trim())
+    : data.keyCategory;
+let lastCategory =
+  getType(keyCategory) === 'array' && keyCategory.length
+    ? keyCategory[keyCategory.length - 1]
+    : undefined;
+const optionalData = data.addOptionalData
+  ? makeTableMap(data.optionalData, 'optionalParamInputKey', 'optionalParamOutputKey')
+  : undefined;
 const categoryRegex = createRegex('item_category');
 
 /*
@@ -1305,7 +1319,12 @@ function toFixed2(input) {
 }
 
 function getTotalValue(inputArray) {
-  return toFixed2(inputArray.reduce((acc, curr) => acc + makeNumber(curr[keyPrice]) * makeNumber(curr[keyQuantity]), 0));
+  return toFixed2(
+    inputArray.reduce(
+      (acc, curr) => acc + makeNumber(curr[keyPrice]) * makeNumber(curr[keyQuantity]),
+      0
+    )
+  );
 }
 
 function getIdsArray(inputArray) {
@@ -1481,8 +1500,9 @@ function getRedditProducts(inputArray) {
       lastCategory = lastCategory[lastCategory.length - 1];
     }
     return {
-      id: item[keyId],
-      price: item[keyPrice],
+      id: item[keyId] ? makeString(item[keyId]) : undefined,
+      item_price: item[keyPrice],
+      quantity: item[keyQuantity],
       name: item[keyName],
       category: item[lastCategory] || lastCategory
     };
@@ -1506,9 +1526,12 @@ function getRakutenCategories(item) {
 
   if (keyCategory.length === 0) return;
 
-  if (keyCategory.length === 1 && getType(item[lastCategory]) === 'array') return item[lastCategory].join('>');
+  if (keyCategory.length === 1 && getType(item[lastCategory]) === 'array')
+    return item[lastCategory].join('>');
 
-  return keyCategory.length === 1 ? item[lastCategory] : keyCategory.map((category) => item[category]).join('>');
+  return keyCategory.length === 1
+    ? item[lastCategory]
+    : keyCategory.map((category) => item[category]).join('>');
 }
 
 function getRakutenLineitems(inputArray) {
@@ -1566,6 +1589,7 @@ function getKlaviyoItems(inputArray) {
 }
 
 
+
 ___SERVER_PERMISSIONS___
 
 [
@@ -1615,4 +1639,6 @@ ___NOTES___
 
 Created on 29/10/2025, 10:16:51
 
+2026/04/27 - Change Notes:
+ - Fix Reddit output item parameters and related types
 
