@@ -300,7 +300,7 @@ function getRedditProducts(inputArray) {
       lastCategory = lastCategory[lastCategory.length - 1];
     }
     return {
-      id: makeString(item[keyId]),
+      id: item[keyId] ? makeString(item[keyId]) : undefined,
       item_price: item[keyPrice],
       quantity: item[keyQuantity],
       name: item[keyName],
