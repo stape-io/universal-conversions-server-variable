@@ -82,6 +82,10 @@ ___TEMPLATE_PARAMETERS___
           {
             "value": "reddit",
             "displayValue": "Reddit"
+          },
+          {
+            "value": "openAI",
+            "displayValue": "OpenAI Ads"
           }
         ],
         "simpleValueType": true,
@@ -451,6 +455,54 @@ ___TEMPLATE_PARAMETERS___
             "type": "EQUALS"
           }
         ]
+      },
+      {
+        "type": "RADIO",
+        "name": "openAIReturnParameter",
+        "displayName": "",
+        "radioItems": [
+          {
+            "value": "contents",
+            "displayValue": "contents",
+            "help": "Choose from \u003cb\u003eproduct\u003c/b\u003e, \u003cb\u003eplan\u003c/b\u003e or \u003cb\u003epage\u003c/b\u003e as described in \u003ca href\u003d\"https://developers.openai.com/ads/supported-events#contents\"\u003e official documentation\u003c/a\u003e as of June 2026.",
+            "subParams": [
+              {
+                "type": "SELECT",
+                "name": "contentTypeOpenAI",
+                "displayName": "",
+                "macrosInSelect": false,
+                "selectItems": [
+                  {
+                    "value": "product",
+                    "displayValue": "product"
+                  },
+                  {
+                    "value": "plan",
+                    "displayValue": "plan"
+                  },
+                  {
+                    "value": "page",
+                    "displayValue": "page"
+                  }
+                ],
+                "simpleValueType": true
+              }
+            ]
+          },
+          {
+            "value": "amount",
+            "displayValue": "amount",
+            "help": "Returns the total event value as described in \u003ca href\u003d\"https://developers.openai.com/ads/supported-events#contents\"\u003e official documentation\u003c/a\u003e as of June 2026."
+          }
+        ],
+        "simpleValueType": true,
+        "enablingConditions": [
+          {
+            "paramName": "platform",
+            "paramValue": "openAI",
+            "type": "EQUALS"
+          }
+        ]
       }
     ]
   },
@@ -588,6 +640,11 @@ ___TEMPLATE_PARAMETERS___
           {
             "paramName": "klaviyoReturnParameter",
             "paramValue": "item",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "openAIReturnParameter",
+            "paramValue": "contents",
             "type": "EQUALS"
           }
         ],
@@ -754,6 +811,16 @@ ___TEMPLATE_PARAMETERS___
             "paramName": "klaviyoReturnParameter",
             "paramValue": "value",
             "type": "EQUALS"
+          },
+          {
+            "paramName": "openAIReturnParameter",
+            "paramValue": "contents",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "openAIReturnParameter",
+            "paramValue": "amount",
+            "type": "EQUALS"
           }
         ],
         "valueValidators": [
@@ -908,6 +975,16 @@ ___TEMPLATE_PARAMETERS___
             "paramName": "redditReturnParameter",
             "paramValue": "products",
             "type": "EQUALS"
+          },
+          {
+            "paramName": "openAIReturnParameter",
+            "paramValue": "contents",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "openAIReturnParameter",
+            "paramValue": "amount",
+            "type": "EQUALS"
           }
         ],
         "valueValidators": [
@@ -982,6 +1059,11 @@ ___TEMPLATE_PARAMETERS___
             "paramName": "klaviyoReturnParameter",
             "paramValue": "item",
             "type": "EQUALS"
+          },
+          {
+            "paramName": "openAIReturnParameter",
+            "paramValue": "contents",
+            "type": "EQUALS"
           }
         ],
         "valueValidators": [
@@ -1005,6 +1087,25 @@ ___TEMPLATE_PARAMETERS___
             "paramName": "klaviyoReturnParameter",
             "paramValue": "items",
             "type": "EQUALS"
+          }
+        ]
+      },
+      {
+        "type": "TEXT",
+        "name": "keyCurrency",
+        "displayName": "Currency",
+        "simpleValueType": true,
+        "enablingConditions": [
+          {
+            "paramName": "openAIReturnParameter",
+            "paramValue": "contents",
+            "type": "EQUALS"
+          }
+        ],
+        "help": "The key for the product price currency within the product object or within the Event Data.",
+        "valueValidators": [
+          {
+            "type": "NON_EMPTY"
           }
         ]
       },
@@ -1203,6 +1304,7 @@ const getEventData = require('getEventData');
 const getType = require('getType');
 const JSON = require('JSON');
 const makeNumber = require('makeNumber');
+const makeInteger = require('makeInteger');
 const makeString = require('makeString');
 const makeTableMap = require('makeTableMap');
 const Math = require('Math');
@@ -1218,6 +1320,7 @@ const useGa4Array = data.getGa4Items;
 const inputArray = useGa4Array ? getEventData('items') : data.inputArray;
 const keyId = useGa4Array ? 'item_id' : data.keyId;
 const keyBrand = useGa4Array ? 'item_brand' : data.keyBrand;
+const keyCurrency = useGa4Array ? 'currency' : data.keyCurrency || 'currency';
 const keyPrice = useGa4Array ? 'price' : data.keyPrice;
 const keyQuantity = useGa4Array ? 'quantity' : data.keyQuantity;
 const keyName = useGa4Array ? 'item_name' : data.keyName;
@@ -1300,6 +1403,10 @@ const task = {
     items: getKlaviyoItems,
     item: getKlaviyoItems,
     value: getTotalValue
+  },
+  openAI: {
+    contents: getOpenAIContents,
+    amount: getOpenAIAmount
   }
 };
 
@@ -1346,6 +1453,30 @@ function setAdditionalParameters(targetItem, item, optionalData) {
     targetItem[optionalData[key]] = item[key];
   }
   return targetItem;
+}
+
+function convertCurrencyValueToMinorUnit(value, currency) {
+  if (!value) return value;
+
+  // prettier-ignore
+  const zeroDecimalCurrencies = [
+    'BIF', 'CLP', 'DJF', 'GNF', 'IDR', 'ISK',
+    'JPY', 'KMF', 'KRW', 'MGA', 'PYG', 'RWF',
+    'UGX', 'VND', 'VUV', 'XAF', 'XOF', 'XPF'
+  ];
+  const threeDecimalCurrencies = ['BHD', 'IQD', 'JOD', 'KWD', 'LYD', 'OMR', 'TND'];
+  const upperCurrency = currency ? makeString(currency).toUpperCase() : '';
+
+  let multiplier = 100; // default: 2 decimal places (BRL, USD, EUR, GBP, etc.)
+  if (zeroDecimalCurrencies.indexOf(upperCurrency) !== -1) multiplier = 1;
+  else if (threeDecimalCurrencies.indexOf(upperCurrency) !== -1) multiplier = 1000;
+
+  return makeInteger(roundValue(value * multiplier));
+}
+
+function roundValue(value) {
+  if (!value) return value;
+  return Math.round(makeNumber(value) * 100) / 100;
 }
 
 /*
@@ -1588,6 +1719,26 @@ function getKlaviyoItems(inputArray) {
   return formattedItems;
 }
 
+function getOpenAIContents(inputArray) {
+  const contentType = data.contentTypeOpenAI;
+  const currency = inputArray[0][keyCurrency] || getEventData('currency');
+  return inputArray.map((item) => {
+    return {
+      id: item[keyId],
+      amount: convertCurrencyValueToMinorUnit(item[keyPrice], currency),
+      name: item[keyName],
+      quantity: item[keyQuantity] ? makeNumber(item[keyQuantity]) : 1,
+      content_type: contentType,
+      currency: currency
+    };
+  });
+}
+
+function getOpenAIAmount(inputArray) {
+  const value = getTotalValue(inputArray);
+  const currency = inputArray[0][keyCurrency] || getEventData(keyCurrency);
+  return convertCurrencyValueToMinorUnit(value, currency);
+}
 
 
 ___SERVER_PERMISSIONS___
@@ -1608,6 +1759,10 @@ ___SERVER_PERMISSIONS___
               {
                 "type": 1,
                 "string": "items"
+              },
+              {
+                "type": 1,
+                "string": "currency"
               }
             ]
           }
@@ -1623,6 +1778,24 @@ ___SERVER_PERMISSIONS___
     },
     "clientAnnotations": {
       "isEditedByUser": true
+    },
+    "isRequired": true
+  },
+  {
+    "instance": {
+      "key": {
+        "publicId": "logging",
+        "versionId": "1"
+      },
+      "param": [
+        {
+          "key": "environments",
+          "value": {
+            "type": 1,
+            "string": "debug"
+          }
+        }
+      ]
     },
     "isRequired": true
   }
@@ -1641,4 +1814,5 @@ Created on 29/10/2025, 10:16:51
 
 2026/04/27 - Change Notes:
  - Fix Reddit output item parameters and related types
+
 

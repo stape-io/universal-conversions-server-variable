@@ -3,6 +3,7 @@ const getEventData = require('getEventData');
 const getType = require('getType');
 const JSON = require('JSON');
 const makeNumber = require('makeNumber');
+const makeInteger = require('makeInteger');
 const makeString = require('makeString');
 const makeTableMap = require('makeTableMap');
 const Math = require('Math');
@@ -18,6 +19,7 @@ const useGa4Array = data.getGa4Items;
 const inputArray = useGa4Array ? getEventData('items') : data.inputArray;
 const keyId = useGa4Array ? 'item_id' : data.keyId;
 const keyBrand = useGa4Array ? 'item_brand' : data.keyBrand;
+const keyCurrency = useGa4Array ? 'currency' : data.keyCurrency || 'currency';
 const keyPrice = useGa4Array ? 'price' : data.keyPrice;
 const keyQuantity = useGa4Array ? 'quantity' : data.keyQuantity;
 const keyName = useGa4Array ? 'item_name' : data.keyName;
@@ -100,6 +102,10 @@ const task = {
     items: getKlaviyoItems,
     item: getKlaviyoItems,
     value: getTotalValue
+  },
+  openAI: {
+    contents: getOpenAIContents,
+    amount: getOpenAIAmount
   }
 };
 
@@ -146,6 +152,30 @@ function setAdditionalParameters(targetItem, item, optionalData) {
     targetItem[optionalData[key]] = item[key];
   }
   return targetItem;
+}
+
+function convertCurrencyValueToMinorUnit(value, currency) {
+  if (!value) return value;
+
+  // prettier-ignore
+  const zeroDecimalCurrencies = [
+    'BIF', 'CLP', 'DJF', 'GNF', 'IDR', 'ISK',
+    'JPY', 'KMF', 'KRW', 'MGA', 'PYG', 'RWF',
+    'UGX', 'VND', 'VUV', 'XAF', 'XOF', 'XPF'
+  ];
+  const threeDecimalCurrencies = ['BHD', 'IQD', 'JOD', 'KWD', 'LYD', 'OMR', 'TND'];
+  const upperCurrency = currency ? makeString(currency).toUpperCase() : '';
+
+  let multiplier = 100; // default: 2 decimal places (BRL, USD, EUR, GBP, etc.)
+  if (zeroDecimalCurrencies.indexOf(upperCurrency) !== -1) multiplier = 1;
+  else if (threeDecimalCurrencies.indexOf(upperCurrency) !== -1) multiplier = 1000;
+
+  return makeInteger(roundValue(value * multiplier));
+}
+
+function roundValue(value) {
+  if (!value) return value;
+  return Math.round(makeNumber(value) * 100) / 100;
 }
 
 /*
@@ -386,4 +416,25 @@ function getKlaviyoItems(inputArray) {
     return data.encloseInArray ? formattedItems : formattedItems[0];
   }
   return formattedItems;
+}
+
+function getOpenAIContents(inputArray) {
+  const contentType = data.contentTypeOpenAI;
+  const currency = inputArray[0][keyCurrency] || getEventData('currency');
+  return inputArray.map((item) => {
+    return {
+      id: item[keyId],
+      amount: convertCurrencyValueToMinorUnit(item[keyPrice], currency),
+      name: item[keyName],
+      quantity: item[keyQuantity] ? makeNumber(item[keyQuantity]) : 1,
+      content_type: contentType,
+      currency: currency
+    };
+  });
+}
+
+function getOpenAIAmount(inputArray) {
+  const value = getTotalValue(inputArray);
+  const currency = inputArray[0][keyCurrency] || getEventData(keyCurrency);
+  return convertCurrencyValueToMinorUnit(value, currency);
 }
