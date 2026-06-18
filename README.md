@@ -7,7 +7,7 @@ Universal Conversions Variable for Server Side Google Tag Manager allows you to 
 - item count
 - etc.
 
-## It currenly supports the following platforms:
+## It currently supports the following platforms:
 
 - Meta Pixel/CAPI
 - Google Analytics 4
@@ -20,6 +20,7 @@ Universal Conversions Variable for Server Side Google Tag Manager allows you to 
 - Pinterest
 - Rakuten
 - Reddit
+- OpenAI
 
 ## Open Source
 

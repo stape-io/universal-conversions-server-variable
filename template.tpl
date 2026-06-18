@@ -29,72 +29,68 @@ ___TEMPLATE_PARAMETERS___
 
 [
   {
-    "type": "GROUP",
-    "name": "platform_group",
-    "displayName": "Choose the Platform",
-    "groupStyle": "NO_ZIPPY",
-    "subParams": [
+    "type": "SELECT",
+    "name": "platform",
+    "displayName": "Platform",
+    "selectItems": [
       {
-        "type": "SELECT",
-        "name": "platform",
-        "displayName": "Platform",
-        "selectItems": [
-          {
-            "value": "meta",
-            "displayValue": "Meta Conversions API"
-          },
-          {
-            "value": "ga4",
-            "displayValue": "Google Analytics 4"
-          },
-          {
-            "value": "tiktok",
-            "displayValue": "TikTok Conversions API"
-          },
-          {
-            "value": "twitter",
-            "displayValue": "Twitter/X Conversions API"
-          },
-          {
-            "value": "microsoft",
-            "displayValue": "Microsoft Ads"
-          },
-          {
-            "value": "klaviyo",
-            "displayValue": "Klaviyo"
-          },
-          {
-            "value": "snapchat",
-            "displayValue": "Snapchat"
-          },
-          {
-            "value": "googleAdsOffline",
-            "displayValue": "Google Ads Offline"
-          },
-          {
-            "value": "pinterest",
-            "displayValue": "Pinterest"
-          },
-          {
-            "value": "rakuten",
-            "displayValue": "Rakuten"
-          },
-          {
-            "value": "reddit",
-            "displayValue": "Reddit"
-          }
-        ],
-        "simpleValueType": true,
-        "subParams": [],
-        "alwaysInSummary": false
+        "value": "meta",
+        "displayValue": "Meta Conversions API"
+      },
+      {
+        "value": "ga4",
+        "displayValue": "Google Analytics 4"
+      },
+      {
+        "value": "tiktok",
+        "displayValue": "TikTok Conversions API"
+      },
+      {
+        "value": "twitter",
+        "displayValue": "Twitter/X Conversions API"
+      },
+      {
+        "value": "microsoft",
+        "displayValue": "Microsoft Ads"
+      },
+      {
+        "value": "klaviyo",
+        "displayValue": "Klaviyo"
+      },
+      {
+        "value": "snapchat",
+        "displayValue": "Snapchat"
+      },
+      {
+        "value": "googleAdsOffline",
+        "displayValue": "Google Ads Offline"
+      },
+      {
+        "value": "pinterest",
+        "displayValue": "Pinterest"
+      },
+      {
+        "value": "rakuten",
+        "displayValue": "Rakuten"
+      },
+      {
+        "value": "reddit",
+        "displayValue": "Reddit"
+      },
+      {
+        "value": "openAI",
+        "displayValue": "OpenAI Ads"
       }
-    ]
+    ],
+    "simpleValueType": true,
+    "subParams": [],
+    "alwaysInSummary": false
   },
   {
     "type": "GROUP",
     "name": "return_parameters_group",
     "displayName": "Parameter to return",
-    "groupStyle": "ZIPPY_OPEN",
+    "groupStyle": "NO_ZIPPY",
     "subParams": [
       {
         "type": "RADIO",
@@ -103,13 +99,13 @@ ___TEMPLATE_PARAMETERS___
         "radioItems": [
           {
             "value": "content_ids",
-            "displayValue": "content_ids",
+            "displayValue": "content_ids [ ]",
             "help": "Returns an array of item ids. Be careful to use the correct \"content_type\" to match the input IDs this variable will return. Take a look at \u003ca href\u003d\"https://developers.facebook.com/docs/marketing-api/conversions-api/parameters/custom-data\"\u003e official documentation\u003c/a\u003e for more information.",
             "subParams": []
           },
           {
             "value": "contents",
-            "displayValue": "contents",
+            "displayValue": "contents [ { } ]",
             "help": "Returns a list of product objects as described in \u003ca href\u003d\"https://developers.facebook.com/docs/marketing-api/conversions-api/parameters/custom-data\"\u003e official documentation\u003c/a\u003e as of October 2025."
           },
           {
@@ -150,7 +146,7 @@ ___TEMPLATE_PARAMETERS___
           },
           {
             "value": "items",
-            "displayValue": "items",
+            "displayValue": "items [ { } ]",
             "help": "Returns a list of product objects as described in \u003ca href\u003d\"https://developers.google.com/analytics/devguides/collection/protocol/ga4/reference/events#add_to_cart_item\" /a\u003e official documentation\u003c/a\u003e as of October 2025. \u003cbr\u003e\nThe list below shows only required parameters. In order to add more parameters use the \u003cstrong\u003eAddtitional/Optional Parameters Section\u003c/strong\u003e"
           }
         ],
@@ -176,7 +172,7 @@ ___TEMPLATE_PARAMETERS___
           },
           {
             "value": "items",
-            "displayValue": "items",
+            "displayValue": "items [ { } ]",
             "help": "Returns a list of product objects as described in \u003ca href\u003d\"https://developers.google.com/google-ads/api/reference/rpc/v22/ConversionUploadService/UploadClickConversions?transport\u003drest\" /a\u003e official documentation\u003c/a\u003e as of October 2025. \u003cbr\u003e\nThe list below shows only required parameters. In order to add more parameters use the \u003cstrong\u003eAddtitional/Optional Parameters Section\u003c/strong\u003e"
           }
         ],
@@ -196,7 +192,7 @@ ___TEMPLATE_PARAMETERS___
         "radioItems": [
           {
             "value": "contents",
-            "displayValue": "contents",
+            "displayValue": "contents [ { } ]",
             "help": "Returns the required parameter \u003cstrong\u003e contents \u003c/strong\u003e. Take a look at \u003ca href\u003d\"https://business-api.tiktok.com/portal/docs?rid\u003doyn7lhbo6ar\u0026id\u003d1771100799076354\"\u003e official documentation\u003c/a\u003e for more information.",
             "subParams": []
           },
@@ -212,7 +208,7 @@ ___TEMPLATE_PARAMETERS___
           },
           {
             "value": "content_ids",
-            "displayValue": "content_ids",
+            "displayValue": "content_ids [ ]",
             "help": "Returns an array of \u003cstrong\u003e ID strings \u003c/strong\u003e. \u003cbr\u003e Take a look at \u003ca href\u003d\"https://business-api.tiktok.com/portal/docs?rid\u003doyn7lhbo6ar\u0026id\u003d1771100799076354\"\u003e official documentation\u003c/a\u003e for more information."
           }
         ],
@@ -232,7 +228,7 @@ ___TEMPLATE_PARAMETERS___
         "radioItems": [
           {
             "value": "contents",
-            "displayValue": "contents",
+            "displayValue": "contents [ { } ]",
             "help": "Returns the required parameter \u003cstrong\u003e contents \u003c/strong\u003e. \u003cbr\u003e Take a look at \u003ca href\u003d\"https://developer.x.com/en/docs/x-ads-api/measurement/web-conversions/api-reference/conversions\"\u003e official documentation\u003c/a\u003e for more information.",
             "subParams": []
           },
@@ -263,7 +259,7 @@ ___TEMPLATE_PARAMETERS___
         "radioItems": [
           {
             "value": "items",
-            "displayValue": "items",
+            "displayValue": "items [ { } ]",
             "help": "Returns the required parameter \u003cstrong\u003e items \u003c/strong\u003e. \u003cbr\u003e Take a look at the \u003ca href\u003d\"https://learn.microsoft.com/en-us/advertising/guides/uet-conversion-api-integration?view\u003dbingads-13\"\u003e official documentation\u003c/a\u003e for more information.",
             "subParams": []
           },
@@ -274,7 +270,7 @@ ___TEMPLATE_PARAMETERS___
           },
           {
             "value": "item_ids",
-            "displayValue": "itemIds",
+            "displayValue": "itemIds [ ]",
             "help": "Returns a list of \u003cstrong\u003e IDs \u003c/strong\u003e. \u003cbr\u003e Take a look at the \u003ca href\u003d\"https://learn.microsoft.com/en-us/advertising/guides/uet-conversion-api-integration?view\u003dbingads-13\"\u003e official documentation\u003c/a\u003e for more information."
           }
         ],
@@ -294,7 +290,7 @@ ___TEMPLATE_PARAMETERS___
         "radioItems": [
           {
             "value": "contents",
-            "displayValue": "contents",
+            "displayValue": "contents [ { } ]",
             "help": "Returns the required parameter \u003cstrong\u003e contents \u003c/strong\u003e. \u003cbr\u003e Take a look at the \u003ca href\u003d\"https://developers.pinterest.com/docs/api/v5/events-create/\"\u003e official documentation\u003c/a\u003e for more information.",
             "subParams": []
           },
@@ -310,7 +306,7 @@ ___TEMPLATE_PARAMETERS___
           },
           {
             "value": "content_ids",
-            "displayValue": "content_ids",
+            "displayValue": "content_ids [ ]",
             "help": "Returns a list of \u003cstrong\u003e IDs \u003c/strong\u003e. \u003cbr\u003eTake a look at the \u003ca href\u003d\"https://developers.pinterest.com/docs/api/v5/events-create/\"\u003e official documentation\u003c/a\u003e for more information."
           }
         ],
@@ -330,13 +326,13 @@ ___TEMPLATE_PARAMETERS___
         "radioItems": [
           {
             "value": "content_ids",
-            "displayValue": "content_ids",
+            "displayValue": "content_ids [ ]",
             "help": "Returns an array of item ids. Be careful to use the correct \"content_type\" to match the input IDs this variable will return. Take a look at \u003ca href\u003d\"https://developers.snap.com/api/marketing-api/Conversions-API/Parameters\"\u003e official documentation\u003c/a\u003e for more information.",
             "subParams": []
           },
           {
             "value": "contents",
-            "displayValue": "contents",
+            "displayValue": "contents [ { } ]",
             "help": "Returns a list of product objects as described in \u003ca href\u003d\"https://developers.snap.com/api/marketing-api/Conversions-API/Parameters\"\u003e official documentation\u003c/a\u003e as of October 2025."
           },
           {
@@ -371,7 +367,7 @@ ___TEMPLATE_PARAMETERS___
         "radioItems": [
           {
             "value": "products",
-            "displayValue": "products",
+            "displayValue": "products [ { } ]",
             "help": "Returns a list of product objects as described in \u003ca href\u003d\"https://ads-api.reddit.com/docs/v3/operations/Post%20Conversion%20Events\"\u003e official documentation\u003c/a\u003e as of October 2025."
           },
           {
@@ -401,7 +397,7 @@ ___TEMPLATE_PARAMETERS___
         "radioItems": [
           {
             "value": "items",
-            "displayValue": "items",
+            "displayValue": "items [ { } ]",
             "help": "Returns a list of product objects as described in \u003ca href\u003d\"https://go.rakutenadvertising.com/hubfs/Rakuten-Affiliate-for-Server-Side-Google-Tag-Manager.pdf\"\u003e official documentation\u003c/a\u003e as of October 2025."
           }
         ],
@@ -421,12 +417,12 @@ ___TEMPLATE_PARAMETERS___
         "radioItems": [
           {
             "value": "items",
-            "displayValue": "items",
+            "displayValue": "items [ { } ]",
             "help": "Returns a list of product objects as described in \u003ca href\u003d\"https://developers.klaviyo.com/en/docs/guide_to_integrating_a_platform_without_a_pre_built_klaviyo_integration#active-on-site-tracking-snippet\"\u003e official documentation\u003c/a\u003e as of October 2025."
           },
           {
             "value": "item",
-            "displayValue": "item",
+            "displayValue": "item [ { } ]",
             "help": "Returns a list of one product object as described in \u003ca href\u003d\"https://developers.klaviyo.com/en/docs/guide_to_integrating_a_platform_without_a_pre_built_klaviyo_integration#active-on-site-tracking-snippet\"\u003e official documentation\u003c/a\u003e as of October 2025.",
             "subParams": [
               {
@@ -448,6 +444,55 @@ ___TEMPLATE_PARAMETERS___
           {
             "paramName": "platform",
             "paramValue": "klaviyo",
+            "type": "EQUALS"
+          }
+        ]
+      },
+      {
+        "type": "RADIO",
+        "name": "openAIReturnParameter",
+        "displayName": "",
+        "radioItems": [
+          {
+            "value": "contents",
+            "displayValue": "contents [ { } ]",
+            "help": "",
+            "subParams": [
+              {
+                "type": "SELECT",
+                "name": "contentTypeOpenAI",
+                "displayName": "content_type parameter",
+                "macrosInSelect": false,
+                "selectItems": [
+                  {
+                    "value": "product",
+                    "displayValue": "product"
+                  },
+                  {
+                    "value": "plan",
+                    "displayValue": "plan"
+                  },
+                  {
+                    "value": "page",
+                    "displayValue": "page"
+                  }
+                ],
+                "simpleValueType": true,
+                "help": "As described in the \u003ca href\u003d\"https://developers.openai.com/ads/supported-events\"\u003eofficial documentation\u003c/a\u003e as of June 2026."
+              }
+            ]
+          },
+          {
+            "value": "amount",
+            "displayValue": "amount",
+            "help": "Returns the total event value as described in \u003ca href\u003d\"https://developers.openai.com/ads/supported-events#contents\"\u003e official documentation\u003c/a\u003e as of June 2026."
+          }
+        ],
+        "simpleValueType": true,
+        "enablingConditions": [
+          {
+            "paramName": "platform",
+            "paramValue": "openAI",
             "type": "EQUALS"
           }
         ]
@@ -492,13 +537,102 @@ ___TEMPLATE_PARAMETERS___
     "type": "GROUP",
     "name": "keys_group",
     "displayName": "Item Array Keys",
-    "groupStyle": "ZIPPY_OPEN",
+    "groupStyle": "NO_ZIPPY",
     "subParams": [
       {
-        "type": "TEXT",
-        "name": "keyId",
-        "displayName": "Product ID",
-        "simpleValueType": true,
+        "type": "GROUP",
+        "name": "keyId_group",
+        "subParams": [
+          {
+            "type": "TEXT",
+            "name": "keyId",
+            "displayName": "Product ID Key",
+            "simpleValueType": true,
+            "help": "Input Array key for item \u003cstrong\u003eunique identifier\u003c/strong\u003e",
+            "valueValidators": [
+              {
+                "type": "NON_EMPTY"
+              }
+            ],
+            "valueHint": "item_id"
+          },
+          {
+            "type": "CHECKBOX",
+            "name": "useAdditionalKeyId",
+            "checkboxText": "Use additional Product ID Key Source",
+            "simpleValueType": true,
+            "subParams": [
+              {
+                "type": "TEXT",
+                "name": "keyIdAdditional",
+                "displayName": "Additional Product ID/SKU Key",
+                "simpleValueType": true,
+                "valueValidators": [
+                  {
+                    "type": "NON_EMPTY"
+                  }
+                ],
+                "enablingConditions": [
+                  {
+                    "paramName": "useAdditionalKeyId",
+                    "paramValue": true,
+                    "type": "EQUALS"
+                  }
+                ],
+                "valueHint": "productId"
+              }
+            ],
+            "help": "When enabled, the variable first checks this value as the source for the Product ID Key. If not found, it falls back to the main Product ID Key specified above."
+          },
+          {
+            "type": "CHECKBOX",
+            "name": "formatIdInShopifyFormat",
+            "checkboxText": "Format Product ID in Shopify Product Feed format",
+            "simpleValueType": true,
+            "help": "When enabled, the Product ID will be formatted as:\n\u003cbr/\u003e\n\u003ci\u003eshopify_{Market Code}_{Product ID}_{Product Variant}\u003c/i\u003e\n\u003cbr/\u003e\u003cbr/\u003e\nIt only formats the value if both Product ID and Product Variant are found. Otherwise, it defaults to Product ID.",
+            "subParams": [
+              {
+                "type": "TEXT",
+                "name": "shopifyKeyVariant",
+                "displayName": "Product Variant ID Key",
+                "simpleValueType": true,
+                "valueValidators": [
+                  {
+                    "type": "NON_EMPTY"
+                  }
+                ],
+                "enablingConditions": [
+                  {
+                    "paramName": "formatIdInShopifyFormat",
+                    "paramValue": true,
+                    "type": "EQUALS"
+                  }
+                ],
+                "valueHint": "variant_id"
+              },
+              {
+                "type": "TEXT",
+                "name": "shopifyMarketCode",
+                "displayName": "Shopify Market Code",
+                "simpleValueType": true,
+                "valueHint": "US",
+                "help": "ISO Market Code (for Custom Shopify) e.g., BR, GB, US. Or ZZ if using the new Merchant API.",
+                "enablingConditions": [
+                  {
+                    "paramName": "formatIdInShopifyFormat",
+                    "paramValue": true,
+                    "type": "EQUALS"
+                  }
+                ],
+                "valueValidators": [
+                  {
+                    "type": "NON_EMPTY"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
         "enablingConditions": [
           {
             "paramName": "metaReturnParameter",
@@ -589,19 +723,18 @@ ___TEMPLATE_PARAMETERS___
             "paramName": "klaviyoReturnParameter",
             "paramValue": "item",
             "type": "EQUALS"
-          }
-        ],
-        "help": "Input Array key for item \u003cstrong\u003eunique identifier\u003c/strong\u003e",
-        "valueValidators": [
+          },
           {
-            "type": "NON_EMPTY"
+            "paramName": "openAIReturnParameter",
+            "paramValue": "contents",
+            "type": "EQUALS"
           }
         ]
       },
       {
         "type": "TEXT",
         "name": "keyBrand",
-        "displayName": "Product Brand",
+        "displayName": "Product Brand Key",
         "simpleValueType": true,
         "enablingConditions": [
           {
@@ -631,12 +764,13 @@ ___TEMPLATE_PARAMETERS___
           }
         ],
         "help": "Input Array key for item \u003cstrong\u003ebrand\u003c/strong\u003e",
-        "valueValidators": []
+        "valueValidators": [],
+        "valueHint": "item_brand"
       },
       {
         "type": "TEXT",
         "name": "keyPrice",
-        "displayName": "Price",
+        "displayName": "Price Key",
         "simpleValueType": true,
         "help": "Input Array key for item \u003cstrong\u003eunit price\u003c/strong\u003e",
         "enablingConditions": [
@@ -754,18 +888,29 @@ ___TEMPLATE_PARAMETERS___
             "paramName": "klaviyoReturnParameter",
             "paramValue": "value",
             "type": "EQUALS"
+          },
+          {
+            "paramName": "openAIReturnParameter",
+            "paramValue": "contents",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "openAIReturnParameter",
+            "paramValue": "amount",
+            "type": "EQUALS"
           }
         ],
         "valueValidators": [
           {
             "type": "NON_EMPTY"
           }
-        ]
+        ],
+        "valueHint": "price"
       },
       {
         "type": "TEXT",
         "name": "keyQuantity",
-        "displayName": "Quantity",
+        "displayName": "Quantity Key",
         "simpleValueType": true,
         "help": "Input Array key for item \u003cstrong\u003equantity\u003c/strong\u003e",
         "enablingConditions": [
@@ -908,18 +1053,29 @@ ___TEMPLATE_PARAMETERS___
             "paramName": "redditReturnParameter",
             "paramValue": "products",
             "type": "EQUALS"
+          },
+          {
+            "paramName": "openAIReturnParameter",
+            "paramValue": "contents",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "openAIReturnParameter",
+            "paramValue": "amount",
+            "type": "EQUALS"
           }
         ],
         "valueValidators": [
           {
             "type": "NON_EMPTY"
           }
-        ]
+        ],
+        "valueHint": "quantity"
       },
       {
         "type": "TEXT",
         "name": "keyName",
-        "displayName": "Name",
+        "displayName": "Name Key",
         "simpleValueType": true,
         "help": "Input Array key for item \u003cstrong\u003ename\u003c/strong\u003e",
         "enablingConditions": [
@@ -982,18 +1138,24 @@ ___TEMPLATE_PARAMETERS___
             "paramName": "klaviyoReturnParameter",
             "paramValue": "item",
             "type": "EQUALS"
+          },
+          {
+            "paramName": "openAIReturnParameter",
+            "paramValue": "contents",
+            "type": "EQUALS"
           }
         ],
         "valueValidators": [
           {
             "type": "NON_EMPTY"
           }
-        ]
+        ],
+        "valueHint": "item_name"
       },
       {
         "type": "TEXT",
         "name": "keyImg",
-        "displayName": "Image URL",
+        "displayName": "Image URL Key",
         "simpleValueType": true,
         "enablingConditions": [
           {
@@ -1006,18 +1168,42 @@ ___TEMPLATE_PARAMETERS___
             "paramValue": "items",
             "type": "EQUALS"
           }
-        ]
+        ],
+        "valueHint": "image_url"
+      },
+      {
+        "type": "TEXT",
+        "name": "keyCurrency",
+        "displayName": "Currency Key",
+        "simpleValueType": true,
+        "enablingConditions": [
+          {
+            "paramName": "openAIReturnParameter",
+            "paramValue": "contents",
+            "type": "EQUALS"
+          },
+          {
+            "paramName": "openAIReturnParameter",
+            "paramValue": "amount",
+            "type": "EQUALS"
+          }
+        ],
+        "help": "The key for the product price currency within the product object or within the Event Data.",
+        "valueValidators": [
+          {
+            "type": "NON_EMPTY"
+          }
+        ],
+        "valueHint": "currency"
       },
       {
         "type": "GROUP",
         "name": "category_group",
-        "displayName": "",
-        "groupStyle": "NO_ZIPPY",
         "subParams": [
           {
             "type": "TEXT",
             "name": "keyCategory",
-            "displayName": "Category",
+            "displayName": "Category Key",
             "simpleValueType": true,
             "help": "Input Array key for item \u003cstrong\u003ecategories\u003c/strong\u003e. This field supports a single category key, multiple category keys and an array of category keys.\u003cbr\u003e If you have multiple category key strings, add them comma separated, from broader on left to narrower on right:\n\u003cbr\u003e\u003cb\u003eExample for multiple category keys:\u003c/b\u003e\n\u003cbr\u003e\n category_1, category_2, category_3\n\u003cbr\u003e\n\u003cbr\u003e\u003cb\u003eExample for array of category keys:\u003c/b\u003e\n\u003cbr\u003e\n [category_1, category_2, category_3]",
             "enablingConditions": [
@@ -1203,6 +1389,7 @@ const getEventData = require('getEventData');
 const getType = require('getType');
 const JSON = require('JSON');
 const makeNumber = require('makeNumber');
+const makeInteger = require('makeInteger');
 const makeString = require('makeString');
 const makeTableMap = require('makeTableMap');
 const Math = require('Math');
@@ -1218,6 +1405,7 @@ const useGa4Array = data.getGa4Items;
 const inputArray = useGa4Array ? getEventData('items') : data.inputArray;
 const keyId = useGa4Array ? 'item_id' : data.keyId;
 const keyBrand = useGa4Array ? 'item_brand' : data.keyBrand;
+const keyCurrency = useGa4Array ? 'currency' : data.keyCurrency || 'currency';
 const keyPrice = useGa4Array ? 'price' : data.keyPrice;
 const keyQuantity = useGa4Array ? 'quantity' : data.keyQuantity;
 const keyName = useGa4Array ? 'item_name' : data.keyName;
@@ -1300,6 +1488,10 @@ const task = {
     items: getKlaviyoItems,
     item: getKlaviyoItems,
     value: getTotalValue
+  },
+  openAI: {
+    contents: getOpenAIContents,
+    amount: getOpenAIAmount
   }
 };
 
@@ -1314,8 +1506,9 @@ return data.jsonOutput ? JSON.stringify(returnValue) : returnValue;
 ========================================================================
 */
 
-function toFixed2(input) {
-  return Math.round(makeNumber(input) * 100) / 100;
+function toFixed2(value) {
+  if (!value) return value;
+  return Math.round(makeNumber(value) * 100) / 100;
 }
 
 function getTotalValue(inputArray) {
@@ -1327,8 +1520,23 @@ function getTotalValue(inputArray) {
   );
 }
 
+function getId(item) {
+  let id = item[keyId];
+
+  if (data.useAdditionalKeyId && data.keyIdAdditional && item[data.keyIdAdditional]) {
+    id = item[data.keyIdAdditional];
+  }
+
+  if (data.formatIdInShopifyFormat && data.shopifyKeyVariant && item[data.shopifyKeyVariant]) {
+    const marketCode = data.shopifyMarketCode || 'ZZ';
+    if (id) id = 'shopify_' + marketCode + '_' + id + '_' + item[data.shopifyKeyVariant];
+  }
+
+  return id;
+}
+
 function getIdsArray(inputArray) {
-  return inputArray.map((item) => item[keyId]);
+  return inputArray.map((item) => getId(item));
 }
 
 function getName(inputArray) {
@@ -1348,6 +1556,25 @@ function setAdditionalParameters(targetItem, item, optionalData) {
   return targetItem;
 }
 
+function convertCurrencyValueToMinorUnit(value, currency) {
+  if (!value) return value;
+
+  // prettier-ignore
+  const zeroDecimalCurrencies = [
+    'BIF', 'CLP', 'DJF', 'GNF', 'IDR', 'ISK',
+    'JPY', 'KMF', 'KRW', 'MGA', 'PYG', 'RWF',
+    'UGX', 'VND', 'VUV', 'XAF', 'XOF', 'XPF'
+  ];
+  const threeDecimalCurrencies = ['BHD', 'IQD', 'JOD', 'KWD', 'LYD', 'OMR', 'TND'];
+  const upperCurrency = currency ? makeString(currency).toUpperCase() : '';
+
+  let multiplier = 100; // default: 2 decimal places (BRL, USD, EUR, GBP, etc.)
+  if (zeroDecimalCurrencies.indexOf(upperCurrency) !== -1) multiplier = 1;
+  else if (threeDecimalCurrencies.indexOf(upperCurrency) !== -1) multiplier = 1000;
+
+  return makeInteger(toFixed2(value * multiplier));
+}
+
 /*
 ========================================================================
                         VENDOR RELATED FUNCTIONS
@@ -1357,7 +1584,7 @@ function setAdditionalParameters(targetItem, item, optionalData) {
 function getMetaContents(inputArray) {
   const contents = inputArray.map((item) => {
     return {
-      id: item[keyId],
+      id: getId(item),
       quantity: item[keyQuantity],
       item_price: item[keyPrice]
     };
@@ -1403,7 +1630,7 @@ function getGA4Items(inputArray) {
   if (useGa4Array) return inputArray;
   return inputArray.map((item) => {
     let ga4Item = {
-      item_id: item[keyId],
+      item_id: getId(item),
       price: item[keyPrice],
       quantity: item[keyQuantity],
       item_name: item[keyName],
@@ -1426,7 +1653,7 @@ function getTikTokContents(inputArray) {
       lastCategory = lastCategory[lastCategory.length - 1];
     }
     const formattedItem = {
-      content_id: item[keyId],
+      content_id: getId(item),
       price: item[keyPrice],
       content_name: item[keyName],
       brand: item[keyBrand],
@@ -1449,7 +1676,7 @@ function getTwitterContents(inputArray) {
       lastCategory = lastCategory[lastCategory.length - 1];
     }
     return {
-      content_id: item[keyId],
+      content_id: getId(item),
       content_price: item[keyPrice],
       content_name: item[keyName],
       content_type: item[lastCategory] || lastCategory
@@ -1460,7 +1687,7 @@ function getTwitterContents(inputArray) {
 function getMicrosoftItems(inputArray) {
   return inputArray.map((item) => {
     return {
-      id: item[keyId],
+      id: getId(item),
       price: item[keyPrice],
       name: item[keyName],
       quantity: item[keyQuantity]
@@ -1479,7 +1706,7 @@ function getPinterestContents(inputArray) {
       lastCategory = lastCategory[lastCategory.length - 1];
     }
     return {
-      id: item[keyId],
+      id: getId(item),
       item_price: item[keyPrice],
       item_name: item[keyName],
       quantity: item[keyQuantity],
@@ -1499,8 +1726,9 @@ function getRedditProducts(inputArray) {
       lastCategory = item[lastCategory];
       lastCategory = lastCategory[lastCategory.length - 1];
     }
+    const id = getId(item);
     return {
-      id: item[keyId] ? makeString(item[keyId]) : undefined,
+      id: id ? makeString(id) : undefined,
       item_price: item[keyPrice],
       quantity: item[keyQuantity],
       name: item[keyName],
@@ -1512,7 +1740,7 @@ function getRedditProducts(inputArray) {
 function getGoogleAdsItems(inputArray) {
   return inputArray.map((item) => {
     return {
-      productId: item[keyId],
+      productId: getId(item),
       unitPrice: item[keyPrice],
       quantity: item[keyQuantity]
     };
@@ -1537,7 +1765,7 @@ function getRakutenCategories(item) {
 function getRakutenLineitems(inputArray) {
   const formattedItems = inputArray.map((item) => {
     const formattedItem = {
-      sku: item[keyId],
+      sku: getId(item),
       quantity: item[keyQuantity],
       amount: item[keyPrice],
       product_name: item[keyName]
@@ -1556,7 +1784,7 @@ function getKlaviyoItems(inputArray) {
   inputArray = data.klaviyoReturnParameter === 'item' ? [inputArray[0]] : inputArray;
   const formattedItems = inputArray.map((item) => {
     const formattedItem = {
-      ProductID: item[keyId],
+      ProductID: getId(item),
       ProductName: item[keyName],
       Quantity: item[keyQuantity],
       ItemPrice: item[keyPrice],
@@ -1588,6 +1816,28 @@ function getKlaviyoItems(inputArray) {
   return formattedItems;
 }
 
+function getOpenAIContents(inputArray) {
+  const contentType = data.contentTypeOpenAI;
+  const currency = inputArray[0][keyCurrency] || getEventData(keyCurrency);
+  return inputArray.map((item) => {
+    const id = getId(item);
+    const amount = item[keyPrice] ? makeNumber(item[keyPrice]) : 0;
+    return {
+      id: id ? makeString(id) : undefined,
+      amount: convertCurrencyValueToMinorUnit(amount, currency),
+      name: item[keyName] ? makeString(item[keyName]) : undefined,
+      quantity: item[keyQuantity] ? makeInteger(item[keyQuantity]) : undefined,
+      content_type: contentType,
+      currency: currency
+    };
+  });
+}
+
+function getOpenAIAmount(inputArray) {
+  const value = getTotalValue(inputArray);
+  const currency = inputArray[0][keyCurrency] || getEventData(keyCurrency);
+  return convertCurrencyValueToMinorUnit(value, currency);
+}
 
 
 ___SERVER_PERMISSIONS___
@@ -1608,6 +1858,10 @@ ___SERVER_PERMISSIONS___
               {
                 "type": 1,
                 "string": "items"
+              },
+              {
+                "type": 1,
+                "string": "currency"
               }
             ]
           }
@@ -1616,7 +1870,7 @@ ___SERVER_PERMISSIONS___
           "key": "eventDataAccess",
           "value": {
             "type": 1,
-            "string": "specific"
+            "string": "any"
           }
         }
       ]
@@ -1637,8 +1891,14 @@ setup: ''
 
 ___NOTES___
 
-Created on 29/10/2025, 10:16:51
+2026-06-15 - Change Notes:
+ - Add OpenAI Ads parameters.
+ - Add additional source for Product ID/SKU.
+ - Add Shopify Product ID Feed format support.
 
-2026/04/27 - Change Notes:
+2026-04-27 - Change Notes:
  - Fix Reddit output item parameters and related types
+
+
+Created on 29/10/2025, 10:16:51
 
