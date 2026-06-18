@@ -120,8 +120,9 @@ return data.jsonOutput ? JSON.stringify(returnValue) : returnValue;
 ========================================================================
 */
 
-function toFixed2(input) {
-  return Math.round(makeNumber(input) * 100) / 100;
+function toFixed2(value) {
+  if (!value) return value;
+  return Math.round(makeNumber(value) * 100) / 100;
 }
 
 function getTotalValue(inputArray) {
@@ -133,8 +134,23 @@ function getTotalValue(inputArray) {
   );
 }
 
+function getId(item) {
+  let id = item[keyId];
+
+  if (data.useAdditionalKeyId && data.keyIdAdditional && item[data.keyIdAdditional]) {
+    id = item[data.keyIdAdditional];
+  }
+
+  if (data.formatIdInShopifyFormat && data.shopifyKeyVariant && item[data.shopifyKeyVariant]) {
+    const marketCode = data.shopifyMarketCode || 'ZZ';
+    if (id) id = 'shopify_' + marketCode + '_' + id + '_' + item[data.shopifyKeyVariant];
+  }
+
+  return id;
+}
+
 function getIdsArray(inputArray) {
-  return inputArray.map((item) => item[keyId]);
+  return inputArray.map((item) => getId(item));
 }
 
 function getName(inputArray) {
@@ -170,12 +186,7 @@ function convertCurrencyValueToMinorUnit(value, currency) {
   if (zeroDecimalCurrencies.indexOf(upperCurrency) !== -1) multiplier = 1;
   else if (threeDecimalCurrencies.indexOf(upperCurrency) !== -1) multiplier = 1000;
 
-  return makeInteger(roundValue(value * multiplier));
-}
-
-function roundValue(value) {
-  if (!value) return value;
-  return Math.round(makeNumber(value) * 100) / 100;
+  return makeInteger(toFixed2(value * multiplier));
 }
 
 /*
@@ -187,7 +198,7 @@ function roundValue(value) {
 function getMetaContents(inputArray) {
   const contents = inputArray.map((item) => {
     return {
-      id: item[keyId],
+      id: getId(item),
       quantity: item[keyQuantity],
       item_price: item[keyPrice]
     };
@@ -233,7 +244,7 @@ function getGA4Items(inputArray) {
   if (useGa4Array) return inputArray;
   return inputArray.map((item) => {
     let ga4Item = {
-      item_id: item[keyId],
+      item_id: getId(item),
       price: item[keyPrice],
       quantity: item[keyQuantity],
       item_name: item[keyName],
@@ -256,7 +267,7 @@ function getTikTokContents(inputArray) {
       lastCategory = lastCategory[lastCategory.length - 1];
     }
     const formattedItem = {
-      content_id: item[keyId],
+      content_id: getId(item),
       price: item[keyPrice],
       content_name: item[keyName],
       brand: item[keyBrand],
@@ -279,7 +290,7 @@ function getTwitterContents(inputArray) {
       lastCategory = lastCategory[lastCategory.length - 1];
     }
     return {
-      content_id: item[keyId],
+      content_id: getId(item),
       content_price: item[keyPrice],
       content_name: item[keyName],
       content_type: item[lastCategory] || lastCategory
@@ -290,7 +301,7 @@ function getTwitterContents(inputArray) {
 function getMicrosoftItems(inputArray) {
   return inputArray.map((item) => {
     return {
-      id: item[keyId],
+      id: getId(item),
       price: item[keyPrice],
       name: item[keyName],
       quantity: item[keyQuantity]
@@ -309,7 +320,7 @@ function getPinterestContents(inputArray) {
       lastCategory = lastCategory[lastCategory.length - 1];
     }
     return {
-      id: item[keyId],
+      id: getId(item),
       item_price: item[keyPrice],
       item_name: item[keyName],
       quantity: item[keyQuantity],
@@ -329,8 +340,9 @@ function getRedditProducts(inputArray) {
       lastCategory = item[lastCategory];
       lastCategory = lastCategory[lastCategory.length - 1];
     }
+    const id = getId(item);
     return {
-      id: item[keyId] ? makeString(item[keyId]) : undefined,
+      id: id ? makeString(id) : undefined,
       item_price: item[keyPrice],
       quantity: item[keyQuantity],
       name: item[keyName],
@@ -342,7 +354,7 @@ function getRedditProducts(inputArray) {
 function getGoogleAdsItems(inputArray) {
   return inputArray.map((item) => {
     return {
-      productId: item[keyId],
+      productId: getId(item),
       unitPrice: item[keyPrice],
       quantity: item[keyQuantity]
     };
@@ -367,7 +379,7 @@ function getRakutenCategories(item) {
 function getRakutenLineitems(inputArray) {
   const formattedItems = inputArray.map((item) => {
     const formattedItem = {
-      sku: item[keyId],
+      sku: getId(item),
       quantity: item[keyQuantity],
       amount: item[keyPrice],
       product_name: item[keyName]
@@ -386,7 +398,7 @@ function getKlaviyoItems(inputArray) {
   inputArray = data.klaviyoReturnParameter === 'item' ? [inputArray[0]] : inputArray;
   const formattedItems = inputArray.map((item) => {
     const formattedItem = {
-      ProductID: item[keyId],
+      ProductID: getId(item),
       ProductName: item[keyName],
       Quantity: item[keyQuantity],
       ItemPrice: item[keyPrice],
@@ -420,13 +432,15 @@ function getKlaviyoItems(inputArray) {
 
 function getOpenAIContents(inputArray) {
   const contentType = data.contentTypeOpenAI;
-  const currency = inputArray[0][keyCurrency] || getEventData('currency');
+  const currency = inputArray[0][keyCurrency] || getEventData(keyCurrency);
   return inputArray.map((item) => {
+    const id = getId(item);
+    const amount = item[keyPrice] ? makeNumber(item[keyPrice]) : 0;
     return {
-      id: item[keyId],
-      amount: convertCurrencyValueToMinorUnit(item[keyPrice], currency),
-      name: item[keyName],
-      quantity: item[keyQuantity] ? makeNumber(item[keyQuantity]) : 1,
+      id: id ? makeString(id) : undefined,
+      amount: convertCurrencyValueToMinorUnit(amount, currency),
+      name: item[keyName] ? makeString(item[keyName]) : undefined,
+      quantity: item[keyQuantity] ? makeInteger(item[keyQuantity]) : undefined,
       content_type: contentType,
       currency: currency
     };
