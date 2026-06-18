@@ -1,8 +1,8 @@
 homepage: 'https://stape.io/'
 documentation: 'https://github.com/stape-io/universal-conversions-server-variable'
 versions:
-  - sha: 6c33375aec8bbad6bc054492666381cd4cccd2ef
-    changeNotes: Add support to OpenAI API parameters.
+  - sha: 81d0889029b2f9967d97cc6f14f8eb0558490264
+    changeNotes: Add support to OpenAI parameters. Add Product ID customization.
   - sha: 5d7f88296453714229816b7eee158ce8ea273acd
     changeNotes: Fix Reddit parameter bug.
   - sha: 11d7d4f1a52ad9ce327178cfa6b7709ab0e4b6d6
